@@ -22,7 +22,9 @@ page {
   --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
   --shadow-glow: 0 0 15px rgba(56, 189, 248, 0.15);
 
+  background-color: #0B1120;
   background-color: var(--bg-primary);
+  color: #F8FAFC;
   color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   box-sizing: border-box;
@@ -38,7 +40,9 @@ page {
 
 /* 玻璃拟态卡片基础 */
 .glass-card {
+  background: #0F172A;
   background: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border: 1px solid var(--border-subtle);
   border-radius: 24rpx;
   padding: 32rpx;
@@ -74,6 +78,7 @@ page {
 .section-title {
   font-size: 32rpx;
   font-weight: 700;
+  color: #F8FAFC;
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -82,6 +87,7 @@ page {
 
 .section-subtitle {
   font-size: 24rpx;
+  color: #64748B;
   color: var(--text-muted);
 }
 
@@ -98,30 +104,35 @@ page {
 
 .status-badge.passed {
   background: rgba(52, 211, 153, 0.15);
+  color: #34D399;
   color: var(--accent-green);
   border: 1px solid rgba(52, 211, 153, 0.3);
 }
 
 .status-badge.pending {
   background: rgba(148, 163, 184, 0.12);
+  color: #94A3B8;
   color: var(--text-secondary);
   border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 .status-badge.learning {
   background: rgba(56, 189, 248, 0.15);
+  color: #38BDF8;
   color: var(--accent-cyan);
   border: 1px solid rgba(56, 189, 248, 0.3);
 }
 
 .status-badge.danger {
   background: rgba(251, 113, 133, 0.15);
+  color: #FB7185;
   color: var(--accent-rose);
   border: 1px solid rgba(251, 113, 133, 0.3);
 }
 
 .status-badge.gold {
   background: rgba(251, 191, 36, 0.15);
+  color: #FBBF24;
   color: var(--accent-gold);
   border: 1px solid rgba(251, 191, 36, 0.3);
 }

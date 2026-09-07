@@ -71,7 +71,8 @@ Page({
     if (user.thesisTriggeredAt) {
       thesisCountdown = calculateThesisCountdown(user.thesisTriggeredAt);
     }
-    const currentStage = thesis.stages[thesis.currentStageIndex] || thesis.stages[0];
+    const stages = (thesis && Array.isArray(thesis.stages)) ? thesis.stages : [];
+    const currentStage = stages[thesis.currentStageIndex] || stages[0];
 
     // 6. 近期重要日程
     const upcomingEvents = getUpcomingEvents(events);
