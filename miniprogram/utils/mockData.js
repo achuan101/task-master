@@ -1,6 +1,6 @@
 // MasterPlan 大数据专业培养方案与基准数据
 
-export const DEFAULT_USER = {
+const DEFAULT_USER = {
   nickName: "信息学院研究生",
   major: "big_data",
   majorName: "大数据专业",
@@ -12,7 +12,7 @@ export const DEFAULT_USER = {
   totalCoursesTarget: 14
 };
 
-export const BIG_DATA_COURSES = [
+const BIG_DATA_COURSES = [
   {
     id: "101700706",
     courseCode: "101700706",
@@ -183,7 +183,7 @@ export const BIG_DATA_COURSES = [
   }
 ];
 
-export const DEFAULT_NATIONAL_EXAMS = [
+const DEFAULT_NATIONAL_EXAMS = [
   {
     id: "national_comp",
     subject: "comprehensive",
@@ -208,7 +208,7 @@ export const DEFAULT_NATIONAL_EXAMS = [
   }
 ];
 
-export const DEFAULT_THESIS_FLOW = {
+const DEFAULT_THESIS_FLOW = {
   paperPublished: false,
   paperStatus: "not_started", // not_started / writing / submitted / accepted / published
   paperTitle: "",
@@ -253,7 +253,7 @@ export const DEFAULT_THESIS_FLOW = {
   ]
 };
 
-export const ANNUAL_EVENTS = [
+const ANNUAL_EVENTS = [
   {
     id: "ev_1",
     title: "国家同等学力统考报名",
@@ -309,3 +309,11 @@ export const ANNUAL_EVENTS = [
     desc: "当年秋季正式答辩窗口"
   }
 ];
+
+module.exports = {
+  DEFAULT_USER,
+  BIG_DATA_COURSES,
+  DEFAULT_NATIONAL_EXAMS,
+  DEFAULT_THESIS_FLOW,
+  ANNUAL_EVENTS
+};

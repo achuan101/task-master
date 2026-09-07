@@ -15,6 +15,7 @@
 
 .sum-label {
   font-size: 22rpx;
+  color: #64748B;
   color: var(--text-muted);
 }
 
@@ -36,6 +37,7 @@
 /* 选项卡切换器 */
 .custom-tabs {
   display: flex;
+  background: #0F172A;
   background: var(--bg-secondary);
   border-radius: 16rpx;
   padding: 8rpx;
@@ -49,6 +51,7 @@
   padding: 16rpx 0;
   font-size: 24rpx;
   font-weight: 600;
+  color: #94A3B8;
   color: var(--text-secondary);
   border-radius: 12rpx;
   display: flex;
@@ -59,7 +62,9 @@
 }
 
 .tab-btn.active {
+  background: #1E293B;
   background: var(--bg-card);
+  color: #38BDF8;
   color: var(--accent-cyan);
   box-shadow: 0 2px 8rpx rgba(0, 0, 0, 0.4);
 }
@@ -73,6 +78,7 @@
 
 .tab-btn.active .tab-badge {
   background: rgba(56, 189, 248, 0.2);
+  color: #38BDF8;
   color: var(--accent-cyan);
 }
 
@@ -114,10 +120,12 @@
 .cat-chip {
   display: inline-block;
   padding: 10rpx 22rpx;
+  background: #0F172A;
   background: var(--bg-secondary);
   border: 1px solid var(--border-subtle);
   border-radius: 999rpx;
   font-size: 22rpx;
+  color: #94A3B8;
   color: var(--text-secondary);
   margin-right: 12rpx;
 }
@@ -125,6 +133,7 @@
 .cat-chip.active {
   background: rgba(56, 189, 248, 0.15);
   border-color: var(--accent-cyan);
+  color: #38BDF8;
   color: var(--accent-cyan);
   font-weight: 600;
 }
@@ -154,6 +163,7 @@
 .exam-name {
   font-size: 28rpx;
   font-weight: 700;
+  color: #F8FAFC;
   color: var(--text-primary);
 }
 
@@ -166,27 +176,32 @@
 
 .exam-tag.national {
   background: rgba(251, 191, 36, 0.2);
+  color: #FBBF24;
   color: var(--accent-gold);
 }
 
 .exam-tag.pool {
   background: rgba(56, 189, 248, 0.2);
+  color: #38BDF8;
   color: var(--accent-cyan);
 }
 
 .exam-tag.non-pool {
   background: rgba(148, 163, 184, 0.2);
+  color: #94A3B8;
   color: var(--text-secondary);
 }
 
 .course-meta-row {
   margin-bottom: 20rpx;
   font-size: 22rpx;
+  color: #64748B;
   color: var(--text-muted);
 }
 
 .credit-text, .credit-pill {
   font-size: 22rpx;
+  color: #38BDF8;
   color: var(--accent-cyan);
   font-weight: 600;
 }
@@ -201,6 +216,7 @@
 
 .chances-label {
   font-size: 22rpx;
+  color: #94A3B8;
   color: var(--text-secondary);
 }
 
@@ -217,6 +233,7 @@
 }
 
 .dot.remain {
+  background: #FBBF24;
   background: var(--accent-gold);
   box-shadow: 0 0 8rpx rgba(251, 191, 36, 0.5);
 }
@@ -227,6 +244,7 @@
 
 .remain-text {
   font-size: 20rpx;
+  color: #FBBF24;
   color: var(--accent-gold);
   margin-left: 6rpx;
 }
@@ -239,6 +257,7 @@
 
 .pass-date-meta {
   font-size: 20rpx;
+  color: #64748B;
   color: var(--text-muted);
 }
 

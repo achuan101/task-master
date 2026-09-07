@@ -1,6 +1,6 @@
 // miniprogram/pages/thesis/thesis.js
-import { Storage } from '../../utils/storage.js';
-import { calculateThesisCountdown, formatDate } from '../../utils/timeCalculator.js';
+const { Storage } = require('../../utils/storage.js');
+const { calculateThesisCountdown, formatDate } = require('../../utils/timeCalculator.js');
 
 Page({
   data: {
@@ -103,7 +103,7 @@ Page({
   // 推进大论文答辩阶段
   toggleStage(e) {
     const index = Number(e.currentTarget.dataset.index);
-    const stages = [...this.data.thesisFlow.stages];
+    const stages = (this.data.thesisFlow.stages || []).slice();
     const targetStage = stages[index];
 
     // 如果未见刊，且点击正式答辩阶段，给予醒目提示

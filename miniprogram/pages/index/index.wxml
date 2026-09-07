@@ -1,5 +1,6 @@
 <!-- miniprogram/pages/index/index.wxml -->
 <view class="page-container">
+  <view wx:if="{{pageError}}" class="page-error-banner">{{pageError}}</view>
   <!-- 1. 顶栏欢迎区 -->
   <view class="header-section flex-between">
     <view class="user-intro">

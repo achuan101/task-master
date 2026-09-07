@@ -60,9 +60,7 @@ page {
 
 /* 渐变标题 */
 .gradient-text {
-  background: linear-gradient(135deg, #38BDF8 0%, #818CF8 50%, #FBBF24 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #38BDF8;
   font-weight: 700;
 }
 
@@ -148,4 +146,16 @@ page {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* 页面错误提示（保证即使数据失败也有可见 UI） */
+.page-error-banner {
+  background: rgba(251, 113, 133, 0.15);
+  border: 1px solid rgba(251, 113, 133, 0.35);
+  color: #FB7185;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 20rpx;
+  font-size: 24rpx;
+  line-height: 1.5;
 }

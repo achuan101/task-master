@@ -1,25 +1,27 @@
 // app.js
-import { Storage } from './utils/storage.js';
+const { Storage } = require('./utils/storage.js');
 
 App({
   onLaunch: function () {
-    // 1. 初始化云开发环境
-    if (!wx.cloud) {
-      console.error('请使用 2.2.3 或以上的基础库以使用云能力');
-    } else {
-      try {
-        wx.cloud.init({
-          env: wx.cloud.DYNAMIC_CURRENT_ENV, // 自动使用当前云环境，或填写具体云环境ID
-          traceUser: true,
-        });
-        console.log('MasterPlan 云开发初始化成功');
-      } catch (err) {
-        console.warn('云开发初始化跳过（本地模式运行）:', err);
+    // 1. 云开发可选：本地/模拟器无云环境时跳过，不阻断 Storage mock
+    try {
+      if (wx.cloud) {
+        // 未配置具体 env 时不要强行 DYNAMIC_CURRENT_ENV，避免部分 DevTools 异常
+        // 需要云能力时在此处填入云环境 ID，例如 env: 'masterplan-xxxxx'
+        console.log('MasterPlan 以本地 Storage/mock 模式启动（云开发未启用）');
+      } else {
+        console.log('当前基础库无云能力，使用本地 Storage/mock');
       }
+    } catch (err) {
+      console.warn('云开发初始化跳过（本地模式运行）:', err);
     }
 
-    // 2. 初始化本地离线数据保障
-    Storage.initDefaultData();
+    // 2. 初始化本地离线数据保障（失败也不阻断页面壳渲染）
+    try {
+      Storage.initDefaultData();
+    } catch (err) {
+      console.error('本地 mock 初始化失败:', err);
+    }
 
     // 3. 检查并展示更新
     this.checkUpdate();

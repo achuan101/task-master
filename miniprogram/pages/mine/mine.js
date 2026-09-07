@@ -1,5 +1,5 @@
 // miniprogram/pages/mine/mine.js
-import { Storage } from '../../utils/storage.js';
+const { Storage } = require('../../utils/storage.js');
 
 Page({
   data: {

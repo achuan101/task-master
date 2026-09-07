@@ -1,6 +1,6 @@
 // miniprogram/pages/index/index.js
-import { Storage } from '../../utils/storage.js';
-import { calculateLifeline, getUpcomingEvents, calculateThesisCountdown } from '../../utils/timeCalculator.js';
+const { Storage } = require('../../utils/storage.js');
+const { calculateLifeline, getUpcomingEvents, calculateThesisCountdown } = require('../../utils/timeCalculator.js');
 
 Page({
   data: {
@@ -20,7 +20,8 @@ Page({
       thesisCountdown: null
     },
     upcomingEvents: [],
-    loading: false
+    loading: false,
+    pageError: ''
   },
 
   onLoad() {
@@ -38,63 +39,68 @@ Page({
   },
 
   refreshDashboard() {
-    const user = Storage.getUser();
-    const courses = Storage.getCourses();
-    const exams = Storage.getNationalExams();
-    const thesis = Storage.getThesisFlow();
-    const events = Storage.getEvents();
+    try {
+      const user = Storage.getUser() || {};
+      const courses = Storage.getCourses() || [];
+      const exams = Storage.getNationalExams() || [];
+      const thesis = Storage.getThesisFlow() || {};
+      const events = Storage.getEvents() || [];
 
-    // 1. 生命线计算
-    const lifeline = calculateLifeline(user.enrollDate, user.deadlineDate);
+      const lifeline = calculateLifeline(user.enrollDate, user.deadlineDate);
 
-    // 2. 课程学分统计
-    const passedCoursesList = courses.filter(c => c.status === 'passed');
-    const passedCourses = passedCoursesList.length;
-    const earnedCredits = passedCoursesList.reduce((sum, c) => sum + (c.credit || 0), 0);
-    const courseProgress = Math.round((earnedCredits / (user.totalCreditsTarget || 35)) * 100);
+      const passedCoursesList = courses.filter(c => c.status === 'passed');
+      const passedCourses = passedCoursesList.length;
+      const earnedCredits = passedCoursesList.reduce((sum, c) => sum + (c.credit || 0), 0);
+      const targetCredits = user.totalCreditsTarget || 35;
+      const courseProgress = targetCredits
+        ? Math.round((earnedCredits / targetCredits) * 100)
+        : 0;
 
-    // 3. 国考统计
-    const passedExams = exams.filter(e => e.status === 'passed').length;
+      const passedExams = exams.filter(e => e.status === 'passed').length;
 
-    // 4. 小论文状态
-    const paperStatusMap = {
-      not_started: '未开始',
-      writing: '撰写中',
-      submitted: '投稿中',
-      accepted: '已录用',
-      published: '已见刊'
-    };
-    const paperStatusText = paperStatusMap[thesis.paperStatus] || '未开始';
+      const paperStatusMap = {
+        not_started: '未开始',
+        writing: '撰写中',
+        submitted: '投稿中',
+        accepted: '已录用',
+        published: '已见刊'
+      };
+      const paperStatusText = paperStatusMap[thesis.paperStatus] || '未开始';
 
-    // 5. 大论文倒计时与当前阶段
-    let thesisCountdown = null;
-    if (user.thesisTriggeredAt) {
-      thesisCountdown = calculateThesisCountdown(user.thesisTriggeredAt);
+      let thesisCountdown = null;
+      if (user.thesisTriggeredAt) {
+        thesisCountdown = calculateThesisCountdown(user.thesisTriggeredAt);
+      }
+      const stages = (thesis && Array.isArray(thesis.stages)) ? thesis.stages : [];
+      const currentStage = stages[thesis.currentStageIndex] || stages[0];
+
+      const upcomingEvents = getUpcomingEvents(events);
+
+      this.setData({
+        pageError: '',
+        user,
+        lifeline,
+        stats: {
+          passedCourses,
+          totalCourses: courses.length,
+          earnedCredits,
+          totalCredits: targetCredits,
+          courseProgress,
+          passedExams,
+          totalExams: exams.length,
+          paperStatusText,
+          paperPassed: !!(thesis.paperPublished || thesis.paperStatus === 'published'),
+          thesisStageText: currentStage ? currentStage.name : '未开始',
+          thesisCountdown
+        },
+        upcomingEvents
+      });
+    } catch (err) {
+      console.error('refreshDashboard failed', err);
+      this.setData({
+        pageError: '大盘数据加载失败，已尝试使用本地 mock。请下拉刷新或在设置页重置数据。'
+      });
     }
-    const stages = (thesis && Array.isArray(thesis.stages)) ? thesis.stages : [];
-    const currentStage = stages[thesis.currentStageIndex] || stages[0];
-
-    // 6. 近期重要日程
-    const upcomingEvents = getUpcomingEvents(events);
-
-    this.setData({
-      user,
-      lifeline,
-      stats: {
-        passedCourses,
-        totalCourses: courses.length,
-        earnedCredits,
-        totalCredits: user.totalCreditsTarget || 35,
-        courseProgress,
-        passedExams,
-        totalExams: exams.length,
-        paperStatusText,
-        paperPassed: thesis.paperPublished || thesis.paperStatus === 'published',
-        thesisStageText: currentStage ? currentStage.name : '未开始',
-        thesisCountdown
-      },
-      upcomingEvents
-    });
   },
 
   navigateToExam() {

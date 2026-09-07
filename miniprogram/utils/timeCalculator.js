@@ -3,19 +3,20 @@
 /**
  * 格式化日期为 YYYY-MM-DD
  */
-export function formatDate(date) {
+function formatDate(date) {
   if (!date) return "";
   const d = new Date(date);
+  if (isNaN(d.getTime())) return "";
   const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  const month = ('0' + (d.getMonth() + 1)).slice(-2);
+  const day = ('0' + d.getDate()).slice(-2);
+  return year + '-' + month + '-' + day;
 }
 
 /**
  * 计算两个日期相差的天数
  */
-export function diffDays(startDate, endDate) {
+function diffDays(startDate, endDate) {
   const start = new Date(startDate).getTime();
   const end = new Date(endDate).getTime();
   const diff = end - start;
@@ -27,7 +28,7 @@ export function diffDays(startDate, endDate) {
  * @param {string} enrollDate 入学/起算日期 (例如 '2026-09-01')
  * @param {string} deadlineDate 4年到期日 (例如 '2030-09-01')
  */
-export function calculateLifeline(enrollDate = '2026-09-01', deadlineDate = '2030-09-01') {
+function calculateLifeline(enrollDate = '2026-09-01', deadlineDate = '2030-09-01') {
   const now = new Date();
   const start = new Date(enrollDate);
   const end = new Date(deadlineDate);
@@ -67,7 +68,7 @@ export function calculateLifeline(enrollDate = '2026-09-01', deadlineDate = '203
 /**
  * 在某个日期上增加精确的自然月份 (如 18 个月)
  */
-export function addMonths(dateStr, monthsToAdd = 18) {
+function addMonths(dateStr, monthsToAdd = 18) {
   const date = new Date(dateStr);
   const currentDay = date.getDate();
   date.setMonth(date.getMonth() + monthsToAdd);
@@ -83,7 +84,7 @@ export function addMonths(dateStr, monthsToAdd = 18) {
  * 计算大论文 1.5 年倒计时
  * @param {string} triggerDate 触发日期 (最后一门考试通过日期)
  */
-export function calculateThesisCountdown(triggerDate) {
+function calculateThesisCountdown(triggerDate) {
   if (!triggerDate) return null;
   const deadline = addMonths(triggerDate, 18);
   const now = new Date();
@@ -100,7 +101,7 @@ export function calculateThesisCountdown(triggerDate) {
 /**
  * 计算下一个即将到来的固定年度事件与剩余天数
  */
-export function getUpcomingEvents(events = []) {
+function getUpcomingEvents(events = []) {
   const now = new Date();
   const currentYear = now.getFullYear();
 
@@ -111,13 +112,21 @@ export function getUpcomingEvents(events = []) {
       eventDate = new Date(currentYear + 1, item.month - 1, item.day);
     }
     const daysLeft = diffDays(now, eventDate);
-    return {
-      ...item,
+    return Object.assign({}, item, {
       targetDate: formatDate(eventDate),
-      daysLeft
-    };
+      daysLeft: daysLeft
+    });
   });
 
   // 按天数升序排序
   return list.sort((a, b) => a.daysLeft - b.daysLeft);
 }
+
+module.exports = {
+  formatDate,
+  diffDays,
+  calculateLifeline,
+  addMonths,
+  calculateThesisCountdown,
+  getUpcomingEvents
+};

@@ -14,15 +14,14 @@
   font-size: 40rpx;
   font-weight: 800;
   letter-spacing: 1rpx;
+  /* Avoid transparent fill: if background-clip fails, title becomes invisible */
   color: #38BDF8;
-  background: linear-gradient(135deg, #38BDF8 0%, #818CF8 60%, #FBBF24 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .app-tag {
   font-size: 20rpx;
   background: rgba(56, 189, 248, 0.12);
+  color: #38BDF8;
   color: var(--accent-cyan);
   padding: 4rpx 14rpx;
   border-radius: 999rpx;
@@ -38,12 +37,14 @@
 
 .major-badge {
   font-size: 24rpx;
+  color: #F8FAFC;
   color: var(--text-primary);
   font-weight: 600;
 }
 
 .school-name {
   font-size: 22rpx;
+  color: #64748B;
   color: var(--text-muted);
 }
 
@@ -80,6 +81,7 @@
   gap: 10rpx;
   font-size: 28rpx;
   font-weight: 700;
+  color: #94A3B8;
   color: var(--text-secondary);
 }
 
@@ -93,6 +95,7 @@
 .days-num {
   font-size: 72rpx;
   font-weight: 800;
+  color: #F8FAFC;
   color: var(--text-primary);
   line-height: 1;
   letter-spacing: -1rpx;
@@ -101,12 +104,14 @@
 
 .days-unit {
   font-size: 26rpx;
+  color: #38BDF8;
   color: var(--accent-cyan);
   font-weight: 600;
 }
 
 .timeline-meta {
   font-size: 24rpx;
+  color: #64748B;
   color: var(--text-muted);
   margin-bottom: 24rpx;
 }
@@ -132,28 +137,32 @@
 .progress-label {
   margin-top: 10rpx;
   font-size: 22rpx;
+  color: #64748B;
   color: var(--text-muted);
 }
 
 /* 四大支柱矩阵 (2x2 Grid) */
 .pillars-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20rpx;
-  margin-bottom: 30rpx;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10rpx 30rpx;
 }
 
 .pillar-card {
+  box-sizing: border-box;
+  width: calc(50% - 20rpx);
+  margin: 10rpx;
+  background: #0F172A;
   background: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border: 1px solid var(--border-subtle);
   border-radius: 20rpx;
   padding: 24rpx;
-  box-shadow: var(--shadow-card);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 190rpx;
-  transition: all 0.2s ease;
 }
 
 .pillar-card:active {
@@ -163,6 +172,7 @@
 
 .pillar-title {
   font-size: 26rpx;
+  color: #94A3B8;
   color: var(--text-secondary);
   font-weight: 600;
 }
@@ -170,6 +180,7 @@
 .pillar-tag {
   font-size: 20rpx;
   background: rgba(255, 255, 255, 0.08);
+  color: #94A3B8;
   color: var(--text-secondary);
   padding: 2rpx 10rpx;
   border-radius: 6rpx;
@@ -177,6 +188,7 @@
 
 .pillar-tag.national {
   background: rgba(251, 191, 36, 0.15);
+  color: #FBBF24;
   color: var(--accent-gold);
 }
 
@@ -192,11 +204,13 @@
 .big-num {
   font-size: 40rpx;
   font-weight: 700;
+  color: #F8FAFC;
   color: var(--text-primary);
 }
 
 .unit-text {
   font-size: 22rpx;
+  color: #64748B;
   color: var(--text-muted);
   margin-left: 6rpx;
 }
@@ -217,6 +231,7 @@
 
 .pillar-footer {
   font-size: 20rpx;
+  color: #64748B;
   color: var(--text-muted);
 }
 
@@ -230,16 +245,19 @@
 
 .status-pill.active {
   background: rgba(56, 189, 248, 0.12);
+  color: #38BDF8;
   color: var(--accent-cyan);
 }
 
 .status-pill.passed {
   background: rgba(52, 211, 153, 0.15);
+  color: #34D399;
   color: var(--accent-green);
 }
 
 .status-pill.lock {
   background: rgba(148, 163, 184, 0.1);
+  color: #64748B;
   color: var(--text-muted);
   font-size: 20rpx;
 }
@@ -247,6 +265,7 @@
 .countdown-warning {
   font-size: 32rpx;
   font-weight: 700;
+  color: #FB7185;
   color: var(--accent-rose);
 }
 
@@ -282,12 +301,14 @@
 
 .event-tag-box.national {
   background: rgba(251, 191, 36, 0.18);
+  color: #FBBF24;
   color: var(--accent-gold);
   border: 1px solid rgba(251, 191, 36, 0.35);
 }
 
 .event-tag-box.pool {
   background: rgba(56, 189, 248, 0.15);
+  color: #38BDF8;
   color: var(--accent-cyan);
   border: 1px solid rgba(56, 189, 248, 0.3);
 }
@@ -307,11 +328,13 @@
 .event-title {
   font-size: 26rpx;
   font-weight: 600;
+  color: #F8FAFC;
   color: var(--text-primary);
 }
 
 .event-desc {
   font-size: 20rpx;
+  color: #64748B;
   color: var(--text-muted);
   max-width: 360rpx;
   overflow: hidden;
@@ -334,17 +357,20 @@
 
 .days-prefix, .days-suffix {
   font-size: 20rpx;
+  color: #64748B;
   color: var(--text-muted);
 }
 
 .days-count {
   font-size: 32rpx;
   font-weight: 700;
+  color: #38BDF8;
   color: var(--accent-cyan);
 }
 
 .event-date {
   font-size: 20rpx;
+  color: #64748B;
   color: var(--text-muted);
 }
 
@@ -365,6 +391,7 @@
 .tip-title {
   font-size: 24rpx;
   font-weight: 700;
+  color: #FBBF24;
   color: var(--accent-gold);
 }
 
@@ -373,6 +400,7 @@
   flex-direction: column;
   gap: 8rpx;
   font-size: 22rpx;
+  color: #94A3B8;
   color: var(--text-secondary);
   line-height: 1.5;
 }

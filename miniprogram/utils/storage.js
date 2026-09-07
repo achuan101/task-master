@@ -1,13 +1,13 @@
 // 本地存储与状态同步适配层 (支持无网/无云环境丝滑运行，并在云就绪后无缝同步)
 
-import {
+const {
   DEFAULT_USER,
   BIG_DATA_COURSES,
   DEFAULT_NATIONAL_EXAMS,
   DEFAULT_THESIS_FLOW,
   ANNUAL_EVENTS
-} from './mockData.js';
-import { addMonths, formatDate } from './timeCalculator.js';
+} = require('./mockData.js');
+const { addMonths, formatDate } = require('./timeCalculator.js');
 
 const STORAGE_KEYS = {
   USER: 'masterplan_user',
@@ -18,7 +18,7 @@ const STORAGE_KEYS = {
   INITIALIZED: 'masterplan_initialized'
 };
 
-export const Storage = {
+const Storage = {
   // 初始化系统默认数据
   initDefaultData(force = false) {
     const isInit = wx.getStorageSync(STORAGE_KEYS.INITIALIZED);
@@ -39,7 +39,7 @@ export const Storage = {
 
   updateUser(userData) {
     const current = this.getUser();
-    const updated = { ...current, ...userData };
+    const updated = Object.assign({}, current, userData);
     wx.setStorageSync(STORAGE_KEYS.USER, updated);
     return updated;
   },
@@ -53,7 +53,7 @@ export const Storage = {
     const courses = this.getCourses();
     const index = courses.findIndex(c => c.id === courseId);
     if (index !== -1) {
-      courses[index] = { ...courses[index], ...patch };
+      courses[index] = Object.assign({}, courses[index], patch);
       wx.setStorageSync(STORAGE_KEYS.COURSES, courses);
       this.checkAutoThesisCountdown(); // 检查是否激活大论文 1.5 年倒计时
       return courses[index];
@@ -70,7 +70,7 @@ export const Storage = {
     const exams = this.getNationalExams();
     const index = exams.findIndex(e => e.id === examId);
     if (index !== -1) {
-      exams[index] = { ...exams[index], ...patch };
+      exams[index] = Object.assign({}, exams[index], patch);
       wx.setStorageSync(STORAGE_KEYS.NATIONAL_EXAMS, exams);
       this.checkAutoThesisCountdown();
       return exams[index];
@@ -85,7 +85,7 @@ export const Storage = {
 
   updateThesisFlow(patch) {
     const flow = this.getThesisFlow();
-    const updated = { ...flow, ...patch };
+    const updated = Object.assign({}, flow, patch);
     wx.setStorageSync(STORAGE_KEYS.THESIS_FLOW, updated);
     return updated;
   },
@@ -108,10 +108,8 @@ export const Storage = {
 
     if (allCoursesPassed && allExamsPassed) {
       // 提取全部 passDate 的最大值
-      const allDates = [
-        ...courses.map(c => c.passDate).filter(Boolean),
-        ...exams.map(e => e.passDate).filter(Boolean)
-      ];
+      const allDates = courses.map(c => c.passDate).filter(Boolean)
+        .concat(exams.map(e => e.passDate).filter(Boolean));
       const maxPassDate = allDates.length > 0 ? allDates.sort().reverse()[0] : formatDate(new Date());
 
       const thesisDeadline = addMonths(maxPassDate, 18);
@@ -129,3 +127,5 @@ export const Storage = {
     this.initDefaultData(true);
   }
 };
+
+module.exports = { Storage };

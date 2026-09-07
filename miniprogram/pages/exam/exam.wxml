@@ -1,5 +1,6 @@
 <!-- miniprogram/pages/exam/exam.wxml -->
 <view class="page-container">
+  <view wx:if="{{pageError}}" class="page-error-banner">{{pageError}}</view>
   <!-- 顶部统计概览 -->
   <view class="exam-summary glass-card flex-between">
     <view class="summary-item">

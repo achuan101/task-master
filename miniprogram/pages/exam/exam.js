@@ -1,6 +1,6 @@
 // miniprogram/pages/exam/exam.js
-import { Storage } from '../../utils/storage.js';
-import { formatDate } from '../../utils/timeCalculator.js';
+const { Storage } = require('../../utils/storage.js');
+const { formatDate } = require('../../utils/timeCalculator.js');
 
 Page({
   data: {
@@ -25,7 +25,8 @@ Page({
       nonPoolTotal: 10,
       nationalPassed: 0,
       nationalTotal: 2
-    }
+    },
+    pageError: ''
   },
 
   onLoad() {
@@ -42,29 +43,37 @@ Page({
   },
 
   loadData() {
-    const exams = Storage.getNationalExams();
-    const courses = Storage.getCourses();
+    try {
+      const exams = Storage.getNationalExams() || [];
+      const courses = Storage.getCourses() || [];
 
-    const poolCourses = courses.filter(c => c.examType === 'pool');
-    const nonPoolCourses = courses.filter(c => c.examType === 'non_pool');
+      const poolCourses = courses.filter(c => c.examType === 'pool');
+      const nonPoolCourses = courses.filter(c => c.examType === 'non_pool');
 
-    const poolPassed = poolCourses.filter(c => c.status === 'passed').length;
-    const nonPoolPassed = nonPoolCourses.filter(c => c.status === 'passed').length;
-    const nationalPassed = exams.filter(e => e.status === 'passed').length;
+      const poolPassed = poolCourses.filter(c => c.status === 'passed').length;
+      const nonPoolPassed = nonPoolCourses.filter(c => c.status === 'passed').length;
+      const nationalPassed = exams.filter(e => e.status === 'passed').length;
 
-    this.setData({
-      nationalExams: exams,
-      poolCourses,
-      nonPoolCourses,
-      stats: {
-        poolPassed,
-        poolTotal: poolCourses.length,
-        nonPoolPassed,
-        nonPoolTotal: nonPoolCourses.length,
-        nationalPassed,
-        nationalTotal: exams.length
-      }
-    });
+      this.setData({
+        pageError: '',
+        nationalExams: exams,
+        poolCourses,
+        nonPoolCourses,
+        stats: {
+          poolPassed,
+          poolTotal: poolCourses.length,
+          nonPoolPassed,
+          nonPoolTotal: nonPoolCourses.length,
+          nationalPassed,
+          nationalTotal: exams.length
+        }
+      });
+    } catch (err) {
+      console.error('exam loadData failed', err);
+      this.setData({
+        pageError: '考试数据加载失败，请下拉刷新或在设置页重置本地数据。'
+      });
+    }
   },
 
   switchTab(e) {
