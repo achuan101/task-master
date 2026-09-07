@@ -1,0 +1,9 @@
+{
+  "name": "timerNotice",
+  "version": "1.0.0",
+  "description": "MasterPlan 每日定时扫描关键节点并推送订阅消息",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

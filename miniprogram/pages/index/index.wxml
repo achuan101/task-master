@@ -1,0 +1,173 @@
+<!-- miniprogram/pages/index/index.wxml -->
+<view class="page-container">
+  <!-- 1. 顶栏欢迎区 -->
+  <view class="header-section flex-between">
+    <view class="user-intro">
+      <view class="app-title-row">
+        <text class="app-name">MasterPlan</text>
+        <text class="app-tag">同等学力申硕</text>
+      </view>
+      <view class="user-sub">
+        <text class="major-badge">{{user.majorName || '大数据专业'}}</text>
+        <text class="school-name">信息学院</text>
+      </view>
+    </view>
+    <image class="header-logo" src="/assets/logo.jpg" mode="aspectFill" bindtap="navigateToSettings"></image>
+  </view>
+
+  <!-- 2. 全局生命线 Hero Card (4年倒计时) -->
+  <view class="glass-card lifeline-card">
+    <view class="lifeline-header flex-between">
+      <view class="lifeline-title">
+        <text class="lifeline-icon">⏳</text>
+        <text>4年学籍生命线</text>
+      </view>
+      <view class="status-badge {{lifeline.status}}">
+        {{lifeline.statusText}}
+      </view>
+    </view>
+
+    <view class="lifeline-body">
+      <view class="countdown-display">
+        <text class="days-num">{{lifeline.remainingDays}}</text>
+        <text class="days-unit">天剩余</text>
+      </view>
+      <view class="timeline-meta">
+        <text>目标截止：{{lifeline.deadlineFormatted}} (共{{lifeline.totalDays}}天)</text>
+      </view>
+
+      <!-- 进度条 -->
+      <view class="progress-wrapper">
+        <view class="progress-bar-bg">
+          <view class="progress-bar-fill" style="width: {{lifeline.percentage}}%"></view>
+        </view>
+        <view class="progress-label flex-between">
+          <text>已消耗 {{lifeline.elapsedDays}} 天</text>
+          <text>{{lifeline.percentage}}%</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 3. 四大核心支柱进度矩阵 (2x2) -->
+  <view class="section-header">
+    <view class="section-title">
+      <text class="section-icon">📊</text>
+      <text>核心阶段攻坚盘</text>
+    </view>
+    <text class="section-subtitle">点击直达各模块打卡</text>
+  </view>
+
+  <view class="pillars-grid">
+    <!-- 支柱 1: 课程考试 -->
+    <view class="pillar-card" bindtap="navigateToExam">
+      <view class="pillar-top flex-between">
+        <text class="pillar-title">课程学分</text>
+        <text class="pillar-tag">{{stats.passedCourses}}/{{stats.totalCourses}}门</text>
+      </view>
+      <view class="pillar-value">
+        <text class="big-num">{{stats.earnedCredits}}</text>
+        <text class="unit-text">/{{stats.totalCredits}} 学分</text>
+      </view>
+      <view class="mini-progress">
+        <view class="mini-fill" style="width: {{stats.courseProgress}}%"></view>
+      </view>
+      <view class="pillar-footer">
+        <text>4门题库 + 10门非题库</text>
+      </view>
+    </view>
+
+    <!-- 支柱 2: 国家统考 -->
+    <view class="pillar-card" bindtap="navigateToExam">
+      <view class="pillar-top flex-between">
+        <text class="pillar-title">国家统考</text>
+        <text class="pillar-tag national">5月统考</text>
+      </view>
+      <view class="pillar-value">
+        <text class="big-num">{{stats.passedExams}}</text>
+        <text class="unit-text">/{{stats.totalExams}} 门已过</text>
+      </view>
+      <view class="pillar-footer exam-hint">
+        <text>学科综合 + 外语 (共4次机会)</text>
+      </view>
+    </view>
+
+    <!-- 支柱 3: 学术小论文 -->
+    <view class="pillar-card" bindtap="navigateToThesis">
+      <view class="pillar-top flex-between">
+        <text class="pillar-title">学术小论文</text>
+        <text class="pillar-tag thesis">前置卡点</text>
+      </view>
+      <view class="pillar-value">
+        <text class="status-pill {{stats.paperPassed ? 'passed' : 'active'}}">{{stats.paperStatusText}}</text>
+      </view>
+      <view class="pillar-footer">
+        <text>答辩前需公开发表≥3000字</text>
+      </view>
+    </view>
+
+    <!-- 支柱 4: 学位大论文 -->
+    <view class="pillar-card" bindtap="navigateToThesis">
+      <view class="pillar-top flex-between">
+        <text class="pillar-title">学位大论文</text>
+        <text class="pillar-tag thesis">1.5年时限</text>
+      </view>
+      <view class="pillar-value">
+        <block wx:if="{{stats.thesisCountdown}}">
+          <text class="countdown-warning">{{stats.thesisCountdown.remainingDays}}天</text>
+        </block>
+        <block wx:else>
+          <text class="status-pill lock">待考完全部激活</text>
+        </block>
+      </view>
+      <view class="pillar-footer">
+        <text>当前：{{stats.thesisStageText}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 4. 近期重要日程 (Upcoming Calendar) -->
+  <view class="section-header">
+    <view class="section-title">
+      <text class="section-icon">🗓️</text>
+      <text>年度备考关键窗口</text>
+    </view>
+    <text class="section-subtitle">按时间先后排序</text>
+  </view>
+
+  <view class="events-list">
+    <block wx:for="{{upcomingEvents}}" wx:key="id">
+      <view class="event-item glass-card">
+        <view class="event-left">
+          <view class="event-tag-box {{item.type}}">
+            <text>{{item.tag}}</text>
+          </view>
+          <view class="event-info">
+            <text class="event-title">{{item.title}}</text>
+            <text class="event-desc">{{item.desc}}</text>
+          </view>
+        </view>
+        <view class="event-right">
+          <view class="days-badge">
+            <text class="days-prefix">还有</text>
+            <text class="days-count">{{item.daysLeft}}</text>
+            <text class="days-suffix">天</text>
+          </view>
+          <text class="event-date">{{item.targetDate}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 5. 备考智囊提示卡 -->
+  <view class="glass-card tip-card">
+    <view class="tip-header">
+      <text class="tip-icon">💡</text>
+      <text class="tip-title">MasterPlan 申硕备考心法</text>
+    </view>
+    <view class="tip-content">
+      <text>• 统考与学校考试可并行准备，每年5月国考及4/10月题库考务必主动报考；</text>
+      <text>• 大论文1.5年倒计时从考完最后一门算起，建议小论文提前撰写，避免倒计时启动后时间局促！</text>
+    </view>
+  </view>
+</view>

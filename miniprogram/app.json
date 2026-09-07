@@ -1,0 +1,65 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/exam/exam",
+    "pages/thesis/thesis",
+    "pages/mine/mine"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#0F172A",
+    "navigationBarTitleText": "MasterPlan 申硕进度",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#0B1120"
+  },
+  "tabBar": {
+    "color": "#94A3B8",
+    "selectedColor": "#38BDF8",
+    "backgroundColor": "#0F172A",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "大盘",
+        "iconPath": "assets/tab_home.png",
+        "selectedIconPath": "assets/tab_home_active.png"
+      },
+      {
+        "pagePath": "pages/exam/exam",
+        "text": "考试",
+        "iconPath": "assets/tab_exam.png",
+        "selectedIconPath": "assets/tab_exam_active.png"
+      },
+      {
+        "pagePath": "pages/thesis/thesis",
+        "text": "论文",
+        "iconPath": "assets/tab_thesis.png",
+        "selectedIconPath": "assets/tab_thesis_active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "设置",
+        "iconPath": "assets/tab_mine.png",
+        "selectedIconPath": "assets/tab_mine_active.png"
+      }
+    ]
+  },
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-icon": "tdesign-miniprogram/icon/icon",
+    "t-progress": "tdesign-miniprogram/progress/progress",
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-tabs": "tdesign-miniprogram/tabs/tabs",
+    "t-tab-panel": "tdesign-miniprogram/tab-panel/tab-panel",
+    "t-steps": "tdesign-miniprogram/steps/steps",
+    "t-step-item": "tdesign-miniprogram/step-item/step-item",
+    "t-toast": "tdesign-miniprogram/toast/toast",
+    "t-dialog": "tdesign-miniprogram/dialog/dialog",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-cell": "tdesign-miniprogram/cell/cell",
+    "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
+    "t-badge": "tdesign-miniprogram/badge/badge"
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

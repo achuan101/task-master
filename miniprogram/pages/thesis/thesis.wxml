@@ -1,0 +1,156 @@
+<!-- miniprogram/pages/thesis/thesis.wxml -->
+<view class="page-container">
+  <!-- 1. 大论文 1.5 年倒计时 Hero Card -->
+  <view class="glass-card countdown-hero {{thesisCountdown ? 'unlocked' : 'locked'}}">
+    <view class="hero-top flex-between">
+      <view class="hero-title">
+        <text class="hero-icon">{{thesisCountdown ? '⚡' : '🔒'}}</text>
+        <text>大论文 1.5 年时限倒计时</text>
+      </view>
+      <view class="status-badge {{thesisCountdown ? 'danger' : 'pending'}}">
+        {{thesisCountdown ? '严格倒计时中' : '未激活'}}
+      </view>
+    </view>
+
+    <block wx:if="{{thesisCountdown}}">
+      <view class="countdown-main">
+        <view class="time-box">
+          <text class="time-val">{{thesisCountdown.remainingDays}}</text>
+          <text class="time-label">天剩余</text>
+        </view>
+        <view class="deadline-details">
+          <text class="detail-line">触发基准：最后一门通过日 ({{thesisCountdown.triggerDate}})</text>
+          <text class="detail-line highlight">答辩截止：{{thesisCountdown.deadline}} 前必须完成</text>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="locked-body">
+        <text class="locked-desc">依据同等学力申硕管理规定，自通过最后一门考试起算 1.5 年（18个月）内必须完成论文答辩与学位申请。</text>
+        <view class="locked-tip">
+          <text class="tip-spark">💡</text>
+          <text>在【考试打卡】中通关所有14门课程与国考后，本倒计时将自动以最后一门通过日期为起点激活！</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 2. 学术小论文前置卡点 -->
+  <view class="section-header">
+    <view class="section-title">
+      <text class="section-icon">📝</text>
+      <text>学术小论文 (前置卡点)</text>
+    </view>
+    <view class="status-badge {{thesisFlow.paperPublished ? 'passed' : 'gold'}}">
+      {{thesisFlow.paperPublished ? '已解锁答辩' : '必须先见刊'}}
+    </view>
+  </view>
+
+  <view class="glass-card paper-card">
+    <view class="paper-header flex-between">
+      <view class="paper-rules">
+        <text class="rule-tag">要求 ≥ 3000 字</text>
+        <text class="rule-tag">公开发行刊物即可</text>
+      </view>
+      <view class="edit-link" bindtap="openEditPaperModal">
+        <text>编辑论文信息 ✍️</text>
+      </view>
+    </view>
+
+    <!-- 论文状态流转选择器 -->
+    <view class="stepper-row">
+      <block wx:for="{{paperStatuses}}" wx:key="key">
+        <view 
+          class="step-node {{thesisFlow.paperStatus === item.key ? 'selected' : ''}}"
+          bindtap="selectPaperStatus"
+          data-status="{{item.key}}"
+        >
+          <view class="node-dot"></view>
+          <text class="node-name">{{item.name}}</text>
+        </view>
+      </block>
+    </view>
+
+    <!-- 论文登记详情 -->
+    <view class="paper-info-box">
+      <view class="info-row">
+        <text class="label">文章题目：</text>
+        <text class="val">{{thesisFlow.paperTitle || '暂未录入（点击右上角编辑）'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="label">发表期刊：</text>
+        <text class="val">{{thesisFlow.paperJournal || '暂未录入'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 3. 学位大论文阶段时间轴 -->
+  <view class="section-header">
+    <view class="section-title">
+      <text class="section-icon">🎓</text>
+      <text>学位大论文答辩进程</text>
+    </view>
+    <text class="section-subtitle">字数要求 ≥ 3万字</text>
+  </view>
+
+  <view class="timeline-container">
+    <block wx:for="{{thesisFlow.stages}}" wx:key="key">
+      <view 
+        class="timeline-item glass-card {{item.status === 'completed' ? 'item-completed' : ''}}"
+        bindtap="toggleStage"
+        data-index="{{index}}"
+      >
+        <view class="timeline-left">
+          <view class="step-num-circle {{item.status === 'completed' ? 'done' : ''}}">
+            <text wx:if="{{item.status === 'completed'}}">✓</text>
+            <text wx:else>{{index + 1}}</text>
+          </view>
+          <view class="step-info">
+            <view class="step-title-row flex-between">
+              <text class="step-name">{{item.name}}</text>
+              <text class="step-tag {{item.status === 'completed' ? 'passed' : 'pending'}}">
+                {{item.status === 'completed' ? '已达成' : '待进行'}}
+              </text>
+            </view>
+            <text class="step-desc">{{item.desc}}</text>
+            <view class="step-meta" wx:if="{{item.date}}">
+              <text class="done-date">完成时间：{{item.date}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 4. 编辑小论文 Modal 弹窗 -->
+  <view class="modal-mask" wx:if="{{showEditPaperModal}}">
+    <view class="modal-card glass-card">
+      <view class="modal-title flex-between">
+        <text>登记学术小论文</text>
+        <text class="close-icon" bindtap="closeEditPaperModal">✕</text>
+      </view>
+      <view class="input-group">
+        <text class="input-label">论文题目 (≥3000字)</text>
+        <input 
+          class="custom-input" 
+          placeholder="如：基于大数据的推荐算法研究" 
+          value="{{paperTitleInput}}"
+          bindinput="onTitleInput"
+        />
+      </view>
+      <view class="input-group">
+        <text class="input-label">发表期刊名称 (需有正式刊号)</text>
+        <input 
+          class="custom-input" 
+          placeholder="如：电脑知识与技术 / 软件工程" 
+          value="{{paperJournalInput}}"
+          bindinput="onJournalInput"
+        />
+      </view>
+      <view class="modal-actions flex-between">
+        <button class="modal-btn cancel" bindtap="closeEditPaperModal">取消</button>
+        <button class="modal-btn confirm" bindtap="savePaperInfo">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

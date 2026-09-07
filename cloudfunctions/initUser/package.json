@@ -1,0 +1,9 @@
+{
+  "name": "initUser",
+  "version": "1.0.0",
+  "description": "MasterPlan 用户免密注册与个人课程字典克隆",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

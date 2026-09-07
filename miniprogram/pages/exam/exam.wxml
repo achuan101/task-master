@@ -1,0 +1,195 @@
+<!-- miniprogram/pages/exam/exam.wxml -->
+<view class="page-container">
+  <!-- 顶部统计概览 -->
+  <view class="exam-summary glass-card flex-between">
+    <view class="summary-item">
+      <text class="sum-label">国家统考</text>
+      <text class="sum-val gold">{{stats.nationalPassed}}/{{stats.nationalTotal}}</text>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <text class="sum-label">学校题库考</text>
+      <text class="sum-val cyan">{{stats.poolPassed}}/{{stats.poolTotal}}</text>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <text class="sum-label">学院非题库</text>
+      <text class="sum-val green">{{stats.nonPoolPassed}}/{{stats.nonPoolTotal}}</text>
+    </view>
+  </view>
+
+  <!-- 选项卡切换 -->
+  <view class="custom-tabs">
+    <view class="tab-btn {{activeTab === 'national' ? 'active' : ''}}" bindtap="switchTab" data-tab="national">
+      <text>国家统考 (5月)</text>
+      <text class="tab-badge">{{stats.nationalPassed}}/2</text>
+    </view>
+    <view class="tab-btn {{activeTab === 'pool' ? 'active' : ''}}" bindtap="switchTab" data-tab="pool">
+      <text>题库考 (4/10月)</text>
+      <text class="tab-badge">{{stats.poolPassed}}/4</text>
+    </view>
+    <view class="tab-btn {{activeTab === 'non_pool' ? 'active' : ''}}" bindtap="switchTab" data-tab="non_pool">
+      <text>非题库 (10门)</text>
+      <text class="tab-badge">{{stats.nonPoolPassed}}/10</text>
+    </view>
+  </view>
+
+  <!-- 1. 国家统考列表 -->
+  <block wx:if="{{activeTab === 'national'}}">
+    <view class="tab-desc-alert">
+      <text class="alert-icon">⚠️</text>
+      <text>闭卷全国统考，每年5月仅举行1次，4年有效期内共4次机会（各门成绩60分合格有效）。</text>
+    </view>
+
+    <view class="exam-list">
+      <block wx:for="{{nationalExams}}" wx:key="id">
+        <view class="exam-card glass-card {{item.status === 'passed' ? 'card-passed' : ''}}">
+          <view class="exam-card-top flex-between">
+            <view class="exam-main-title">
+              <text class="exam-tag national">统考</text>
+              <text class="exam-name">{{item.subjectName}}</text>
+            </view>
+            <view class="status-pill {{item.status === 'passed' ? 'passed' : 'pending'}}">
+              {{item.status === 'passed' ? '已通过' : '备考中'}}
+            </view>
+          </view>
+
+          <!-- 4次机会指示灯 -->
+          <view class="chances-row flex-between">
+            <view class="chances-label">
+              <text>4年4次机会使用跟踪：</text>
+            </view>
+            <view class="chance-dots">
+              <view class="dot {{4 - item.remainingAttempts >= 1 ? 'used' : 'remain'}}"></view>
+              <view class="dot {{4 - item.remainingAttempts >= 2 ? 'used' : 'remain'}}"></view>
+              <view class="dot {{4 - item.remainingAttempts >= 3 ? 'used' : 'remain'}}"></view>
+              <view class="dot {{4 - item.remainingAttempts >= 4 ? 'used' : 'remain'}}"></view>
+              <text class="remain-text">剩余 {{item.remainingAttempts}} 次</text>
+            </view>
+          </view>
+
+          <view class="exam-card-footer flex-between">
+            <view class="pass-date-meta">
+              <text wx:if="{{item.passDate}}">通过时间：{{item.passDate}}</text>
+              <text wx:else>每年3月初报名 · 5月下旬开考</text>
+            </view>
+            <button 
+              class="action-btn {{item.status === 'passed' ? 'btn-cancel' : 'btn-pass'}}"
+              bindtap="toggleNationalStatus"
+              data-id="{{item.id}}"
+              data-status="{{item.status}}"
+              size="mini"
+            >
+              {{item.status === 'passed' ? '取消通过' : '标记已通过'}}
+            </button>
+          </view>
+        </view>
+      </block>
+    </view>
+  </block>
+
+  <!-- 2. 学校题库考列表 -->
+  <block wx:if="{{activeTab === 'pool'}}">
+    <view class="tab-desc-alert pool">
+      <text class="alert-icon">📘</text>
+      <text>学校统一组织题库闭卷考试，每年4月和10月可报考，原题抽取率高，建议尽早通关！</text>
+    </view>
+
+    <view class="exam-list">
+      <block wx:for="{{poolCourses}}" wx:key="id">
+        <view class="exam-card glass-card {{item.status === 'passed' ? 'card-passed' : ''}}">
+          <view class="exam-card-top flex-between">
+            <view class="exam-main-title">
+              <text class="exam-tag pool">题库</text>
+              <text class="exam-name">{{item.courseName}}</text>
+            </view>
+            <view class="status-pill {{item.status === 'passed' ? 'passed' : 'pending'}}">
+              {{item.status === 'passed' ? '已通过' : '未通过'}}
+            </view>
+          </view>
+
+          <view class="course-meta-row flex-between">
+            <text class="code-text">代码：{{item.courseCode}} · {{item.categoryName}}</text>
+            <text class="credit-text">{{item.credit}} 学分</text>
+          </view>
+
+          <view class="exam-card-footer flex-between">
+            <view class="pass-date-meta">
+              <text wx:if="{{item.passDate}}">通过日期：{{item.passDate}}</text>
+              <text wx:else>抽考批次：每年4月 / 10月</text>
+            </view>
+            <button 
+              class="action-btn {{item.status === 'passed' ? 'btn-cancel' : 'btn-pass'}}"
+              bindtap="toggleCourseStatus"
+              data-id="{{item.id}}"
+              data-status="{{item.status}}"
+              size="mini"
+            >
+              {{item.status === 'passed' ? '取消通过' : '打卡通过'}}
+            </button>
+          </view>
+        </view>
+      </block>
+    </view>
+  </block>
+
+  <!-- 3. 学院非题库课程列表 -->
+  <block wx:if="{{activeTab === 'non_pool'}}">
+    <view class="tab-desc-alert green">
+      <text class="alert-icon">📗</text>
+      <text>学院自主组织开卷考试或结课考核，包含专业课、方法课与选修课，通过门槛友好。</text>
+    </view>
+
+    <!-- 分类筛选器 -->
+    <scroll-view class="category-scroll" scroll-x enable-flex>
+      <block wx:for="{{categories}}" wx:key="key">
+        <view 
+          class="cat-chip {{selectedCategory === item.key ? 'active' : ''}}"
+          bindtap="filterCategory"
+          data-cat="{{item.key}}"
+        >
+          {{item.name}}
+        </view>
+      </block>
+    </scroll-view>
+
+    <view class="exam-list">
+      <block wx:for="{{nonPoolCourses}}" wx:key="id">
+        <block wx:if="{{selectedCategory === 'all' || item.category === selectedCategory}}">
+          <view class="exam-card glass-card {{item.status === 'passed' ? 'card-passed' : ''}}">
+            <view class="exam-card-top flex-between">
+              <view class="exam-main-title">
+                <text class="exam-tag non-pool">{{item.categoryName}}</text>
+                <text class="exam-name">{{item.courseName}}</text>
+              </view>
+              <text class="credit-pill">{{item.credit}} 学分</text>
+            </view>
+
+            <view class="course-meta-row flex-between">
+              <text class="code-text">课程代号：{{item.courseCode}}</text>
+              <view class="status-pill {{item.status === 'passed' ? 'passed' : 'pending'}}">
+                {{item.status === 'passed' ? '已通过' : '待考核'}}
+              </view>
+            </view>
+
+            <view class="exam-card-footer flex-between">
+              <view class="pass-date-meta">
+                <text wx:if="{{item.passDate}}">记录：{{item.passDate}} 通过</text>
+                <text wx:else>期末结课或开卷提交</text>
+              </view>
+              <button 
+                class="action-btn {{item.status === 'passed' ? 'btn-cancel' : 'btn-pass'}}"
+                bindtap="toggleCourseStatus"
+                data-id="{{item.id}}"
+                data-status="{{item.status}}"
+                size="mini"
+              >
+                {{item.status === 'passed' ? '取消通过' : '打卡通过'}}
+              </button>
+            </view>
+          </view>
+        </block>
+      </block>
+    </view>
+  </block>
+</view>

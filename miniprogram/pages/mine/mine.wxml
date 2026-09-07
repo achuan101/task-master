@@ -1,0 +1,127 @@
+<!-- miniprogram/pages/mine/mine.wxml -->
+<view class="page-container">
+  <!-- 个人身份卡片 -->
+  <view class="profile-card glass-card flex-between">
+    <view class="profile-left">
+      <image class="avatar-img" src="/assets/logo.jpg" mode="aspectFill"></image>
+      <view class="profile-meta">
+        <text class="user-nickname">{{user.nickName || '信息学院同等学力同学'}}</text>
+        <view class="tag-row">
+          <text class="user-tag school">中国人民大学·信息学院</text>
+          <text class="user-tag major">{{user.majorName || '大数据专业'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 1. 所属专业与方案体系 -->
+  <view class="section-header">
+    <view class="section-title">
+      <text class="section-icon">📚</text>
+      <text>培养专业与方案体系</text>
+    </view>
+    <text class="section-subtitle">架构支持多专业扩展</text>
+  </view>
+
+  <view class="major-list">
+    <block wx:for="{{majors}}" wx:key="id">
+      <view 
+        class="major-card glass-card {{item.active ? 'active-major' : 'disabled-major'}}"
+        bindtap="onSelectMajor"
+        data-major="{{item}}"
+      >
+        <view class="major-info flex-between">
+          <view>
+            <view class="major-name-row">
+              <text class="major-name">{{item.name}}</text>
+              <text class="status-pill {{item.active ? 'passed' : 'pending'}}">
+                {{item.active ? '当前使用中' : '即将上线'}}
+              </text>
+            </view>
+            <text class="major-desc">{{item.desc}}</text>
+          </view>
+          <view class="check-icon" wx:if="{{item.active}}">✓</view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 2. 学籍生命线时间调整 -->
+  <view class="section-header">
+    <view class="section-title">
+      <text class="section-icon">⏱️</text>
+      <text>学籍起止与到期设定</text>
+    </view>
+  </view>
+
+  <view class="glass-card settings-card">
+    <picker mode="date" value="{{user.enrollDate}}" bindchange="onEnrollDateChange">
+      <view class="setting-item flex-between">
+        <text class="setting-label">学籍/资格生效日期</text>
+        <view class="setting-val-wrap">
+          <text class="setting-val">{{user.enrollDate}}</text>
+          <text class="arrow">›</text>
+        </view>
+      </view>
+    </picker>
+
+    <view class="divider"></view>
+
+    <picker mode="date" value="{{user.deadlineDate}}" bindchange="onDeadlineDateChange">
+      <view class="setting-item flex-between">
+        <text class="setting-label">4年有效期截止日</text>
+        <view class="setting-val-wrap">
+          <text class="setting-val highlight">{{user.deadlineDate}}</text>
+          <text class="arrow">›</text>
+        </view>
+      </view>
+    </picker>
+  </view>
+
+  <!-- 3. 便捷工具箱 -->
+  <view class="section-header">
+    <view class="section-title">
+      <text class="section-icon">🛠️</text>
+      <text>工具与数据管理</text>
+    </view>
+  </view>
+
+  <view class="glass-card settings-card">
+    <view class="setting-item flex-between" bindtap="copyReport">
+      <view class="tool-left">
+        <text class="tool-icon">📋</text>
+        <text class="setting-label">复制当前进度简报</text>
+      </view>
+      <text class="tool-desc">向导师汇报 / 同步进度 ›</text>
+    </view>
+
+    <view class="divider"></view>
+
+    <view class="setting-item flex-between" bindtap="resetData">
+      <view class="tool-left">
+        <text class="tool-icon danger">🔄</text>
+        <text class="setting-label danger">重置所有测试打卡数据</text>
+      </view>
+      <text class="tool-desc">恢复默认未通过状态 ›</text>
+    </view>
+  </view>
+
+  <!-- 4. 开发者与云凭证卡片 -->
+  <view class="glass-card info-card">
+    <view class="info-title">
+      <text>小程序云开发配置参数</text>
+    </view>
+    <view class="cred-row flex-between" bindtap="copyAppId">
+      <text class="cred-label">AppID (小程序ID)：</text>
+      <text class="cred-val">{{appInfo.appId}} (点击复制)</text>
+    </view>
+    <view class="cred-row flex-between">
+      <text class="cred-label">原始ID：</text>
+      <text class="cred-val">{{appInfo.rawId}}</text>
+    </view>
+    <view class="cred-row flex-between">
+      <text class="cred-label">运行架构：</text>
+      <text class="cred-val">原生小程序 + TDesign + 微信云开发</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,200 @@
+/* miniprogram/pages/mine/mine.wxss */
+
+.profile-card {
+  padding: 32rpx;
+  background: linear-gradient(145deg, #1E293B 0%, #0F172A 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.profile-left {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.avatar-img {
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: 24rpx;
+  box-shadow: 0 0 16rpx rgba(56, 189, 248, 0.35);
+  border: 2rpx solid rgba(56, 189, 248, 0.4);
+}
+
+.profile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+}
+
+.user-nickname {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.user-tag {
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+}
+
+.user-tag.school {
+  background: rgba(129, 140, 248, 0.15);
+  color: #A5B4FC;
+}
+
+.user-tag.major {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-cyan);
+}
+
+/* 专业列表 */
+.major-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.major-card {
+  padding: 24rpx 28rpx;
+  margin-bottom: 0;
+}
+
+.major-card.active-major {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(14, 165, 233, 0.08) 100%);
+}
+
+.major-card.disabled-major {
+  opacity: 0.6;
+}
+
+.major-name-row {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  margin-bottom: 6rpx;
+}
+
+.major-name {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.major-desc {
+  font-size: 22rpx;
+  color: var(--text-muted);
+}
+
+.check-icon {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  color: #0F172A;
+  font-weight: 900;
+  font-size: 24rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 设置项卡片 */
+.settings-card {
+  padding: 8rpx 28rpx;
+}
+
+.setting-item {
+  padding: 24rpx 0;
+}
+
+.setting-label {
+  font-size: 26rpx;
+  color: var(--text-primary);
+}
+
+.setting-label.danger {
+  color: var(--accent-rose);
+}
+
+.setting-val-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.setting-val {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+.setting-val.highlight {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+.arrow {
+  font-size: 32rpx;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.tool-left {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.tool-icon {
+  font-size: 28rpx;
+}
+
+.tool-desc {
+  font-size: 22rpx;
+  color: var(--text-muted);
+}
+
+/* 云开发信息卡片 */
+.info-card {
+  margin-top: 30rpx;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  padding: 24rpx 28rpx;
+}
+
+.info-title {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 16rpx;
+}
+
+.cred-row {
+  font-size: 22rpx;
+  margin-bottom: 10rpx;
+}
+
+.cred-row:last-child {
+  margin-bottom: 0;
+}
+
+.cred-label {
+  color: var(--text-muted);
+}
+
+.cred-val {
+  color: var(--accent-cyan);
+  font-family: monospace;
+}

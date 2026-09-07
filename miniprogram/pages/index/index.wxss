@@ -1,0 +1,377 @@
+/* miniprogram/pages/index/index.wxss */
+
+.header-section {
+  padding: 16rpx 0 28rpx;
+}
+
+.app-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.app-name {
+  font-size: 40rpx;
+  font-weight: 800;
+  letter-spacing: 1rpx;
+  background: linear-gradient(135deg, #38BDF8 0%, #818CF8 60%, #FBBF24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-tag {
+  font-size: 20rpx;
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--accent-cyan);
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.user-sub {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 8rpx;
+}
+
+.major-badge {
+  font-size: 24rpx;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.school-name {
+  font-size: 22rpx;
+  color: var(--text-muted);
+}
+
+.header-logo {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 0 16rpx rgba(56, 189, 248, 0.3);
+  border: 2rpx solid rgba(56, 189, 248, 0.4);
+}
+
+/* 4年生命线 Hero Card */
+.lifeline-card {
+  background: linear-gradient(145deg, #1E293B 0%, #0F172A 100%);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.lifeline-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -30%;
+  width: 260rpx;
+  height: 260rpx;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.lifeline-title {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.countdown-display {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+  margin: 20rpx 0 10rpx;
+}
+
+.days-num {
+  font-size: 72rpx;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -1rpx;
+  text-shadow: 0 0 20rpx rgba(56, 189, 248, 0.3);
+}
+
+.days-unit {
+  font-size: 26rpx;
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.timeline-meta {
+  font-size: 24rpx;
+  color: var(--text-muted);
+  margin-bottom: 24rpx;
+}
+
+.progress-wrapper {
+  margin-top: 16rpx;
+}
+
+.progress-bar-bg {
+  height: 12rpx;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38BDF8 0%, #818CF8 50%, #FBBF24 100%);
+  border-radius: 999rpx;
+  transition: width 0.6s ease;
+}
+
+.progress-label {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: var(--text-muted);
+}
+
+/* 四大支柱矩阵 (2x2 Grid) */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.pillar-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 190rpx;
+  transition: all 0.2s ease;
+}
+
+.pillar-card:active {
+  transform: scale(0.98);
+  border-color: var(--border-focus);
+}
+
+.pillar-title {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.pillar-tag {
+  font-size: 20rpx;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  padding: 2rpx 10rpx;
+  border-radius: 6rpx;
+}
+
+.pillar-tag.national {
+  background: rgba(251, 191, 36, 0.15);
+  color: var(--accent-gold);
+}
+
+.pillar-tag.thesis {
+  background: rgba(129, 140, 248, 0.15);
+  color: #818CF8;
+}
+
+.pillar-value {
+  margin: 12rpx 0 8rpx;
+}
+
+.big-num {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.unit-text {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  margin-left: 6rpx;
+}
+
+.mini-progress {
+  height: 6rpx;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999rpx;
+  overflow: hidden;
+  margin-bottom: 10rpx;
+}
+
+.mini-fill {
+  height: 100%;
+  background: var(--accent-cyan);
+  border-radius: 999rpx;
+}
+
+.pillar-footer {
+  font-size: 20rpx;
+  color: var(--text-muted);
+}
+
+.status-pill {
+  font-size: 24rpx;
+  padding: 6rpx 14rpx;
+  border-radius: 8rpx;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.status-pill.active {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--accent-cyan);
+}
+
+.status-pill.passed {
+  background: rgba(52, 211, 153, 0.15);
+  color: var(--accent-green);
+}
+
+.status-pill.lock {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--text-muted);
+  font-size: 20rpx;
+}
+
+.countdown-warning {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--accent-rose);
+}
+
+/* 近期事件列表 */
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.event-item {
+  margin-bottom: 0;
+  padding: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-left {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+  flex: 1;
+}
+
+.event-tag-box {
+  padding: 8rpx 14rpx;
+  border-radius: 12rpx;
+  font-size: 22rpx;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.event-tag-box.national {
+  background: rgba(251, 191, 36, 0.18);
+  color: var(--accent-gold);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+}
+
+.event-tag-box.pool {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.event-tag-box.thesis {
+  background: rgba(129, 140, 248, 0.18);
+  color: #A5B4FC;
+  border: 1px solid rgba(129, 140, 248, 0.35);
+}
+
+.event-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.event-title {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.event-desc {
+  font-size: 20rpx;
+  color: var(--text-muted);
+  max-width: 360rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.event-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4rpx;
+}
+
+.days-badge {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+
+.days-prefix, .days-suffix {
+  font-size: 20rpx;
+  color: var(--text-muted);
+}
+
+.days-count {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.event-date {
+  font-size: 20rpx;
+  color: var(--text-muted);
+}
+
+/* 备考心法卡片 */
+.tip-card {
+  margin-top: 30rpx;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 12rpx;
+}
+
+.tip-title {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.tip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
