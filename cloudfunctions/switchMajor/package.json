@@ -1,0 +1,9 @@
+{
+  "name": "switchMajor",
+  "version": "1.0.0",
+  "description": "原子切换专业：更新用户并整包替换课程/国考",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

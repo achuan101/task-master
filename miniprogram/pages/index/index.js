@@ -8,7 +8,7 @@ const MAJOR_LIST = Object.keys(MAJOR_REGISTRY).map(key => ({
   key,
   majorName: MAJOR_REGISTRY[key].majorName,
   school: MAJOR_REGISTRY[key].school,
-  icon: key === 'big_data' ? '💻' : '📚'
+  icon: MAJOR_REGISTRY[key].icon || '🎓'
 }));
 
 Page({
@@ -167,26 +167,29 @@ Page({
     this.setData({ onboardEnrollDate: e.detail.value });
   },
 
-  confirmOnboarding() {
+  async confirmOnboarding() {
     const majorKey = this.data.selectedMajor;
     if (!majorKey) return;
 
     const major = MAJOR_REGISTRY[majorKey];
-    // 保存专业选择与入学时间
-    Storage.updateUser({
-      major: majorKey,
-      majorName: major.majorName,
-      school: major.school,
-      totalCreditsTarget: major.totalCreditsTarget,
-      enrollDate: this.data.onboardEnrollDate,
-      onboardingComplete: true
-    });
-    // 切换专业课程数据
-    Storage.switchMajor(majorKey);
+    wx.showLoading({ title: '初始化中...', mask: true });
+    try {
+      // 先写入入学时间与引导完成标记（switchMajor 会整包更新专业字段）
+      Storage.updateUser({
+        enrollDate: this.data.onboardEnrollDate,
+        onboardingComplete: true,
+        school: major.school
+      });
+      await Storage.switchMajor(majorKey);
 
-    this.setData({ showOnboarding: false });
-    this.refreshDashboard();
-
-    wx.showToast({ title: '欢迎开始规划！', icon: 'success' });
+      this.setData({ showOnboarding: false });
+      this.refreshDashboard();
+      wx.showToast({ title: '欢迎开始规划！', icon: 'success' });
+    } catch (err) {
+      console.warn('引导初始化失败:', err);
+      wx.showToast({ title: '初始化失败，请重试', icon: 'none' });
+    } finally {
+      wx.hideLoading();
+    }
   }
 });

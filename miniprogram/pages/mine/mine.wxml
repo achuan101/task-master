@@ -8,7 +8,7 @@
         <text class="user-nickname">{{user.nickName || '信息学院同等学力同学'}}</text>
         <view class="tag-row">
           <text class="user-tag school">{{majorInfo.school || '中国人民大学·信息学院'}}</text>
-          <text class="user-tag major">{{user.majorName || '大数据专业'}}</text>
+          <text class="user-tag major">{{user.majorName || ''}}</text>
         </view>
       </view>
     </view>
@@ -27,9 +27,9 @@
       <view class="major-info flex-between">
         <view>
           <view class="major-name-row">
-            <text class="major-name">{{user.majorName || '大数据专业'}}</text>
+            <text class="major-name">{{user.majorName || ''}}</text>
           </view>
-          <text class="major-desc">{{majorInfo.courseCount || 14}}门课程 · {{majorInfo.totalCredits || 35}}学分 · 已上线</text>
+          <text class="major-desc">{{majorInfo.courseCount}}门课程 · {{majorInfo.totalCredits}}学分 · 已上线</text>
         </view>
         <view class="check-icon">✓</view>
       </view>

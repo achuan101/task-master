@@ -91,11 +91,18 @@ Page({
           title: '确认切换',
           content: `切换到「${selectedMajor.majorName}」后，当前考试进度将被清除，是否继续？`,
           confirmText: '确认切换',
-          success: (modalRes) => {
-            if (modalRes.confirm) {
-              Storage.switchMajor(selectedKey);
+          success: async (modalRes) => {
+            if (!modalRes.confirm) return;
+            wx.showLoading({ title: '切换中...', mask: true });
+            try {
+              await Storage.switchMajor(selectedKey);
               this.loadUser();
               wx.showToast({ title: '已切换专业', icon: 'success' });
+            } catch (err) {
+              console.warn('切换专业失败:', err);
+              wx.showToast({ title: '切换失败，请重试', icon: 'none' });
+            } finally {
+              wx.hideLoading();
             }
           }
         });

@@ -26,24 +26,27 @@ exports.main = async (event, context) => {
       thesisDeadline: null,
       thesisTriggeredAt: null,
       totalCreditsTarget: major === 'management_science' ? 41 : 35,
+      totalCoursesTarget: major === 'management_science' ? 16 : 14,
+      majorRevision: 0,
       createdAt: db.serverDate()
     };
     await db.collection('users').doc(openid).set({ data: defaultUser });
 
-    // 3. 从 major_templates 克隆个人课程表
-    // 显式声明 limit 避免默认的 20 条限制
+    // 3. 从 major_templates 克隆个人课程表（docId = openid_courseCode，与 switchMajor 一致）
     const templates = await db.collection('major_templates').where({ major: major }).limit(100).get();
     for (const item of templates.data) {
-      await db.collection('courses').doc(item._id).set({
+      const courseCode = item.courseCode;
+      await db.collection('courses').doc(`${openid}_${courseCode}`).set({
         data: {
           _openid: openid,
-          id: item._id,
-          courseCode: item.courseCode,
+          id: courseCode,
+          courseCode: courseCode,
           courseName: item.courseName,
           category: item.category,
           categoryName: item.categoryName,
           credit: item.credit,
           examType: item.examType,
+          major: major,
           status: 'pending',
           passDate: null,
           score: null,
@@ -61,7 +64,7 @@ exports.main = async (event, context) => {
       { id: 'national_foreign', subject: 'foreign_lang', subjectName: '外国语水平考试 (英语)', status: 'pending', remainingAttempts: 4, attempts: [] }
     ];
     for (const exam of nationalExams) {
-      await db.collection('national_exams').doc(exam.id).set({
+      await db.collection('national_exams').doc(`${openid}_${exam.id}`).set({
         data: {
           _openid: openid,
           major: major,

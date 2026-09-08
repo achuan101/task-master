@@ -44,7 +44,7 @@
         <text class="app-tag">同等学力申硕</text>
       </view>
       <view class="user-sub">
-        <text class="major-badge">{{user.majorName || '大数据专业'}}</text>
+        <text class="major-badge">{{user.majorName || ''}}</text>
         <text class="school-name">信息学院</text>
       </view>
     </view>

@@ -44,7 +44,7 @@ const MANAGEMENT_SCIENCE_TEMPLATES = [
 const ANNUAL_EVENTS = [
   { eventType: "national_exam_signup", eventName: "国考报名", recurringMonth: 3, recurringDay: 8, reminderDaysBefore: 7, tag: "国考报名", description: "每年3月初全国统考报名" },
   { eventType: "school_pool_spring", eventName: "学校题库考试 (春季)", recurringMonth: 4, recurringDay: 18, reminderDaysBefore: 14, tag: "题库考", description: "春季题库抽考" },
-  { eventType: "national_exam", eventName: "全国统一考试", recurringMonth: 5, recurringDay: 23, reminderDaysBefore: 7, tag: "5月国考", description: "外国语+计算机学科综合考试" },
+  { eventType: "national_exam", eventName: "全国统一考试", recurringMonth: 5, recurringDay: 23, reminderDaysBefore: 7, tag: "5月国考", description: "外国语+学科综合水平考试" },
   { eventType: "thesis_defense_spring", eventName: "上半年硕士论文答辩", recurringMonth: 5, recurringDay: 28, reminderDaysBefore: 30, tag: "春季答辩", description: "上半年学位答辩窗口期" },
   { eventType: "school_pool_autumn", eventName: "学校题库考试 (秋季)", recurringMonth: 10, recurringDay: 24, reminderDaysBefore: 14, tag: "题库考", description: "秋季题库抽考" },
   { eventType: "thesis_defense_autumn", eventName: "下半年硕士论文答辩", recurringMonth: 11, recurringDay: 25, reminderDaysBefore: 30, tag: "秋季答辩", description: "下半年学位答辩窗口期" }

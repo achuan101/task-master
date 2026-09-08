@@ -1,5 +1,5 @@
 // 本地存储与云端同步适配层
-// 本地存储按 openid 隔离，写入时异步同步到云端数据库
+// 本地存储按 openid 隔离；专业切换通过云函数原子完成；拉取时按「专业+课程+国考」整包对齐
 
 import {
   DEFAULT_USER,
@@ -9,12 +9,10 @@ import {
 } from './mockData.js';
 import { addMonths, formatDate } from './timeCalculator.js';
 
-// 存储 key 模板（按 openid 隔离）
 const keyOf = (openid, name) => `masterplan_${name}_${openid}`;
 
 let _openid = null;
 
-// 云端同步重试（最多 3 次）
 async function _syncToCloud(collection, operation, data, docId, retries = 3) {
   for (let i = 0; i < retries; i++) {
     try {
@@ -35,48 +33,169 @@ async function _syncToCloud(collection, operation, data, docId, retries = 3) {
   }
 }
 
-export const Storage = {
-  // ========== 初始化 ==========
+/** 规范化课号：优先 courseCode，否则去掉 openid_ 前缀 */
+function extractCourseCode(course) {
+  if (!course) return '';
+  if (course.courseCode) return String(course.courseCode);
+  const raw = String(course.id || course._id || '');
+  if (!raw) return '';
+  if (_openid && raw.startsWith(`${_openid}_`)) {
+    return raw.slice(_openid.length + 1);
+  }
+  // 兼容历史 major_courseCode 文档 id
+  const knownMajors = Object.keys(MAJOR_REGISTRY);
+  for (const m of knownMajors) {
+    if (raw.startsWith(`${m}_`)) return raw.slice(m.length + 1);
+  }
+  return raw;
+}
 
-  /**
-   * 用户初始化：设置 openid，从云端拉取数据到本地缓存
-   * @param {string} openid - 微信用户 openid
-   * @param {object} initUserData - initUser 云函数返回的用户数据（新用户时使用）
-   */
+function extractExamId(exam) {
+  if (!exam) return '';
+  if (exam.id) return String(exam.id);
+  const raw = String(exam._id || '');
+  if (!raw) return '';
+  if (_openid && raw.startsWith(`${_openid}_`)) {
+    return raw.slice(_openid.length + 1);
+  }
+  return raw;
+}
+
+/** 克隆专业课程/国考并打上 major 标签 */
+function cloneMajorPackage(majorKey) {
+  const major = MAJOR_REGISTRY[majorKey];
+  if (!major) return null;
+  const courses = JSON.parse(JSON.stringify(major.courses)).map((c) => ({
+    ...c,
+    major: majorKey
+  }));
+  const nationalExams = JSON.parse(JSON.stringify(major.nationalExams)).map((e) => ({
+    ...e,
+    major: majorKey
+  }));
+  return { major, courses, nationalExams };
+}
+
+/** 课程课号集合是否与专业模板一致 */
+function coursesMatchMajor(courses, majorKey) {
+  const registry = MAJOR_REGISTRY[majorKey];
+  if (!registry) return false;
+  const expected = new Set(registry.courses.map((c) => c.courseCode || c.id));
+  const actual = new Set((courses || []).map(extractCourseCode).filter(Boolean));
+  if (expected.size !== actual.size) return false;
+  for (const code of expected) {
+    if (!actual.has(code)) return false;
+  }
+  return !(courses || []).some((c) => c.major && c.major !== majorKey);
+}
+
+/** 去重并规范化课程列表 */
+function normalizeCourses(list, majorKey) {
+  const map = new Map();
+  for (const c of list || []) {
+    const code = extractCourseCode(c);
+    if (!code) continue;
+    const normalized = {
+      ...c,
+      id: code,
+      courseCode: code,
+      major: c.major || majorKey
+    };
+    delete normalized._id;
+    delete normalized._openid;
+    delete normalized.createdAt;
+    delete normalized.updatedAt;
+
+    const prev = map.get(code);
+    if (!prev) {
+      map.set(code, normalized);
+      continue;
+    }
+    const score = (x, raw) =>
+      (x.major === majorKey ? 4 : 0) +
+      (x.status === 'passed' ? 2 : 0) +
+      (String((raw && raw._id) || '').indexOf('_') >= 0 ? 1 : 0);
+    if (score(normalized, c) >= score(prev, null)) {
+      map.set(code, normalized);
+    }
+  }
+  return Array.from(map.values());
+}
+
+function normalizeExams(list, majorKey) {
+  const map = new Map();
+  for (const e of list || []) {
+    const id = extractExamId(e);
+    if (!id) continue;
+    const normalized = {
+      ...e,
+      id,
+      major: e.major || majorKey
+    };
+    delete normalized._id;
+    delete normalized._openid;
+    delete normalized.createdAt;
+    delete normalized.updatedAt;
+
+    const prev = map.get(id);
+    if (!prev) {
+      map.set(id, normalized);
+      continue;
+    }
+    const score = (x) =>
+      (x.major === majorKey ? 2 : 0) + (x.status === 'passed' ? 1 : 0);
+    if (score(normalized) >= score(prev)) {
+      map.set(id, normalized);
+    }
+  }
+  return Array.from(map.values());
+}
+
+export const Storage = {
   async init(openid, initUserData = null) {
     _openid = openid;
 
-    // 如果是新用户（initUser 返回了初始数据），直接写入本地缓存
     if (initUserData) {
-      const major = MAJOR_REGISTRY[initUserData.major] || MAJOR_REGISTRY['big_data'];
-      wx.setStorageSync(keyOf(openid, 'user'), initUserData);
-      wx.setStorageSync(keyOf(openid, 'courses'), JSON.parse(JSON.stringify(major.courses)));
-      wx.setStorageSync(keyOf(openid, 'national_exams'), JSON.parse(JSON.stringify(major.nationalExams)));
+      const majorKey = initUserData.major || 'big_data';
+      const pkg = cloneMajorPackage(majorKey);
+      const user = {
+        ...DEFAULT_USER,
+        ...initUserData,
+        majorRevision: initUserData.majorRevision || 0
+      };
+      wx.setStorageSync(keyOf(openid, 'user'), user);
+      wx.setStorageSync(keyOf(openid, 'courses'), pkg.courses);
+      wx.setStorageSync(keyOf(openid, 'national_exams'), pkg.nationalExams);
       wx.setStorageSync(keyOf(openid, 'thesis_flow'), JSON.parse(JSON.stringify(DEFAULT_THESIS_FLOW)));
       wx.setStorageSync(keyOf(openid, 'events'), ANNUAL_EVENTS);
       wx.setStorageSync(keyOf(openid, 'initialized'), true);
       return;
     }
 
-    // 老用户：从云端拉取最新数据
     await this.syncFromCloud();
   },
 
-  /**
-   * 获取当前 openid
-   */
   getOpenid() {
     return _openid;
   },
 
+  /** 将整包专业数据写入本地 */
+  _applyMajorPackage(user, courses, exams, thesisFlow) {
+    wx.setStorageSync(keyOf(_openid, 'user'), user);
+    wx.setStorageSync(keyOf(_openid, 'courses'), courses);
+    wx.setStorageSync(keyOf(_openid, 'national_exams'), exams);
+    if (thesisFlow) {
+      wx.setStorageSync(keyOf(_openid, 'thesis_flow'), thesisFlow);
+    }
+  },
+
   /**
-   * 从云端全量拉取用户数据到本地缓存
+   * 从云端全量拉取；专业/课程/国考按版本号与课号集合整包对齐，禁止名称与课程拆开覆盖
    */
   async syncFromCloud() {
     if (!_openid) return;
 
     try {
-      // 并行拉取所有集合
       const [userRes, coursesRes, examsRes, thesisRes] = await Promise.all([
         wx.cloud.callFunction({ name: 'syncUserData', data: { collection: 'users', operation: 'read' } }),
         wx.cloud.callFunction({ name: 'syncUserData', data: { collection: 'courses', operation: 'read' } }),
@@ -89,73 +208,93 @@ export const Storage = {
       const examsData = examsRes.result && examsRes.result.data;
       const thesisData = thesisRes.result && thesisRes.result.data;
 
-      const userMajor = (userData && userData.major) || DEFAULT_USER.major;
-      const major = MAJOR_REGISTRY[userMajor] || MAJOR_REGISTRY['big_data'];
+      const localUser = wx.getStorageSync(keyOf(_openid, 'user')) || null;
+      const localCourses = wx.getStorageSync(keyOf(_openid, 'courses')) || [];
+      const localExams = wx.getStorageSync(keyOf(_openid, 'national_exams')) || [];
+      const localThesis = wx.getStorageSync(keyOf(_openid, 'thesis_flow')) || null;
 
-      // 用户信息：云端有则用云端，否则用默认
-      if (userData) {
-        wx.setStorageSync(keyOf(_openid, 'user'), userData);
-      } else {
-        wx.setStorageSync(keyOf(_openid, 'user'), { ...DEFAULT_USER });
+      const localRev = (localUser && localUser.majorRevision) || 0;
+      const cloudRev = (userData && userData.majorRevision) || 0;
+
+      // 本地专业版本更新：整包保留本地，避免云端半切换数据盖回
+      if (localUser && localUser.major && localRev > cloudRev) {
+        this._applyMajorPackage(
+          localUser,
+          localCourses.length ? localCourses : cloneMajorPackage(localUser.major).courses,
+          localExams.length ? localExams : cloneMajorPackage(localUser.major).nationalExams,
+          localThesis || JSON.parse(JSON.stringify(DEFAULT_THESIS_FLOW))
+        );
+        wx.setStorageSync(keyOf(_openid, 'events'), ANNUAL_EVENTS);
+        wx.setStorageSync(keyOf(_openid, 'initialized'), true);
+        return;
       }
 
-      // 课程数据：云端有则用云端，否则用默认模板
-      if (coursesData && coursesData.length > 0) {
-        // 确保每条课程都有 id 字段（云端可能只有 _id）
-        const normalizedCourses = coursesData.map(c => ({
-          ...c,
-          id: c.id || c._id
-        }));
-        wx.setStorageSync(keyOf(_openid, 'courses'), normalizedCourses);
-      } else {
-        wx.setStorageSync(keyOf(_openid, 'courses'), JSON.parse(JSON.stringify(major.courses)));
+      if (!userData) {
+        this._initLocalDefaults();
+        return;
       }
 
-      // 国考数据：云端有则用云端，否则用默认模板
-      if (examsData && examsData.length > 0) {
-        // 确保每条国考都有 id 字段
-        const normalizedExams = examsData.map(e => ({
-          ...e,
-          id: e.id || e._id
-        }));
-        wx.setStorageSync(keyOf(_openid, 'national_exams'), normalizedExams);
-      } else {
-        wx.setStorageSync(keyOf(_openid, 'national_exams'), JSON.parse(JSON.stringify(major.nationalExams)));
-      }
+      const majorKey = userData.major || DEFAULT_USER.major;
+      let courses = normalizeCourses(coursesData, majorKey);
+      let exams = normalizeExams(examsData, majorKey);
 
-      // 论文流程：云端有则用云端，否则用默认
+      let thesisFlow = JSON.parse(JSON.stringify(DEFAULT_THESIS_FLOW));
       if (thesisData && ((Array.isArray(thesisData) && thesisData.length > 0) || (!Array.isArray(thesisData) && Object.keys(thesisData).length > 0))) {
-        const flow = Array.isArray(thesisData) ? thesisData[0] : thesisData;
-        wx.setStorageSync(keyOf(_openid, 'thesis_flow'), flow);
+        thesisFlow = Array.isArray(thesisData) ? thesisData[0] : thesisData;
+      }
+
+      // 云端课程与专业不一致：用模板重置本地，并触发云端修复
+      if (!coursesMatchMajor(courses, majorKey)) {
+        console.warn('[syncFromCloud] 检测到专业与课程不一致，按专业模板修复');
+        const pkg = cloneMajorPackage(majorKey);
+        courses = pkg.courses;
+        exams = pkg.nationalExams;
+        const repairedUser = {
+          ...userData,
+          major: majorKey,
+          majorName: pkg.major.majorName,
+          school: pkg.major.school || userData.school,
+          totalCreditsTarget: pkg.major.totalCreditsTarget,
+          majorRevision: Math.max(cloudRev, localRev) + 1,
+          thesisDeadline: null,
+          thesisTriggeredAt: null
+        };
+        thesisFlow = JSON.parse(JSON.stringify(DEFAULT_THESIS_FLOW));
+        this._applyMajorPackage(repairedUser, courses, exams, thesisFlow);
+        // 异步调用云函数整包修复，不阻塞启动
+        wx.cloud.callFunction({ name: 'switchMajor', data: { major: majorKey } }).catch((err) => {
+          console.warn('[syncFromCloud] 云端修复 switchMajor 失败:', err);
+        });
       } else {
-        wx.setStorageSync(keyOf(_openid, 'thesis_flow'), JSON.parse(JSON.stringify(DEFAULT_THESIS_FLOW)));
+        const user = {
+          ...userData,
+          majorRevision: cloudRev
+        };
+        if (!exams.length) {
+          exams = cloneMajorPackage(majorKey).nationalExams;
+        }
+        this._applyMajorPackage(user, courses, exams, thesisFlow);
       }
 
       wx.setStorageSync(keyOf(_openid, 'events'), ANNUAL_EVENTS);
       wx.setStorageSync(keyOf(_openid, 'initialized'), true);
     } catch (err) {
       console.warn('[syncFromCloud] 云端同步失败，使用本地默认数据:', err);
-      // 云函数不可用或网络异常，用默认模板兜底
       this._initLocalDefaults();
     }
   },
 
-  /**
-   * 本地无数据时用默认模板初始化（离线兜底）
-   */
   _initLocalDefaults() {
     if (!_openid) return;
-    const user = { ...DEFAULT_USER };
-    const major = MAJOR_REGISTRY[user.major] || MAJOR_REGISTRY['big_data'];
+    const user = { ...DEFAULT_USER, majorRevision: 0 };
+    const pkg = cloneMajorPackage(user.major);
     wx.setStorageSync(keyOf(_openid, 'user'), user);
-    wx.setStorageSync(keyOf(_openid, 'courses'), JSON.parse(JSON.stringify(major.courses)));
-    wx.setStorageSync(keyOf(_openid, 'national_exams'), JSON.parse(JSON.stringify(major.nationalExams)));
+    wx.setStorageSync(keyOf(_openid, 'courses'), pkg.courses);
+    wx.setStorageSync(keyOf(_openid, 'national_exams'), pkg.nationalExams);
     wx.setStorageSync(keyOf(_openid, 'thesis_flow'), JSON.parse(JSON.stringify(DEFAULT_THESIS_FLOW)));
     wx.setStorageSync(keyOf(_openid, 'events'), ANNUAL_EVENTS);
     wx.setStorageSync(keyOf(_openid, 'initialized'), true);
   },
-
-  // ========== 读操作（同步，从本地缓存读取） ==========
 
   getUser() {
     if (!_openid) return { ...DEFAULT_USER };
@@ -169,16 +308,14 @@ export const Storage = {
 
   getCourses() {
     if (!_openid) {
-      const major = this.getCurrentMajor();
-      return JSON.parse(JSON.stringify(major.courses));
+      return cloneMajorPackage(this.getUser().major || 'big_data').courses;
     }
     return wx.getStorageSync(keyOf(_openid, 'courses')) || [];
   },
 
   getNationalExams() {
     if (!_openid) {
-      const major = this.getCurrentMajor();
-      return JSON.parse(JSON.stringify(major.nationalExams));
+      return cloneMajorPackage(this.getUser().major || 'big_data').nationalExams;
     }
     return wx.getStorageSync(keyOf(_openid, 'national_exams')) || [];
   },
@@ -193,14 +330,11 @@ export const Storage = {
     return wx.getStorageSync(keyOf(_openid, 'events')) || [...ANNUAL_EVENTS];
   },
 
-  // ========== 写操作（先更新本地，再异步同步云端） ==========
-
   updateUser(userData) {
     if (!_openid) return { ...DEFAULT_USER };
     const current = this.getUser();
     const updated = { ...current, ...userData };
     wx.setStorageSync(keyOf(_openid, 'user'), updated);
-    // 异步同步到云端
     _syncToCloud('users', 'update', userData, _openid);
     return updated;
   },
@@ -208,12 +342,12 @@ export const Storage = {
   updateCourse(courseId, patch) {
     if (!_openid) return null;
     const courses = this.getCourses();
-    const index = courses.findIndex(c => c.id === courseId);
+    const index = courses.findIndex((c) => c.id === courseId || c.courseCode === courseId);
     if (index !== -1) {
       courses[index] = { ...courses[index], ...patch };
       wx.setStorageSync(keyOf(_openid, 'courses'), courses);
-      // 异步同步到云端（用 courseCode 作为 docId）
-      _syncToCloud('courses', 'upsert', courses[index], courseId);
+      // docId 与 switchMajor 云函数保持一致：openid_courseCode
+      _syncToCloud('courses', 'upsert', courses[index], `${_openid}_${courseId}`);
       this.checkAutoThesisCountdown();
       return courses[index];
     }
@@ -223,12 +357,11 @@ export const Storage = {
   updateNationalExam(examId, patch) {
     if (!_openid) return null;
     const exams = this.getNationalExams();
-    const index = exams.findIndex(e => e.id === examId);
+    const index = exams.findIndex((e) => e.id === examId);
     if (index !== -1) {
       exams[index] = { ...exams[index], ...patch };
       wx.setStorageSync(keyOf(_openid, 'national_exams'), exams);
-      // 异步同步到云端
-      _syncToCloud('national_exams', 'upsert', exams[index], examId);
+      _syncToCloud('national_exams', 'upsert', exams[index], `${_openid}_${examId}`);
       this.checkAutoThesisCountdown();
       return exams[index];
     }
@@ -240,26 +373,22 @@ export const Storage = {
     const flow = this.getThesisFlow();
     const updated = { ...flow, ...patch };
     wx.setStorageSync(keyOf(_openid, 'thesis_flow'), updated);
-    // 异步同步到云端（thesis_flow 使用固定 docId）
     _syncToCloud('thesis_flow', 'upsert', updated, `thesis_${_openid}`);
     return updated;
   },
 
-  /**
-   * 自动校验：若全部 14 门课程 + 2 门国考全部通过，以最后一门 passDate 为起点启动 1.5 年大论文倒计时
-   */
   checkAutoThesisCountdown() {
     const courses = this.getCourses();
     const exams = this.getNationalExams();
     const user = this.getUser();
 
-    const allCoursesPassed = courses.every(c => c.status === 'passed');
-    const allExamsPassed = exams.every(e => e.status === 'passed');
+    const allCoursesPassed = courses.length > 0 && courses.every((c) => c.status === 'passed');
+    const allExamsPassed = exams.length > 0 && exams.every((e) => e.status === 'passed');
 
     if (allCoursesPassed && allExamsPassed) {
       const allDates = [
-        ...courses.map(c => c.passDate).filter(Boolean),
-        ...exams.map(e => e.passDate).filter(Boolean)
+        ...courses.map((c) => c.passDate).filter(Boolean),
+        ...exams.map((e) => e.passDate).filter(Boolean)
       ];
       const maxPassDate = allDates.length > 0 ? allDates.sort().reverse()[0] : formatDate(new Date());
       const thesisDeadline = addMonths(maxPassDate, 18);
@@ -267,11 +396,6 @@ export const Storage = {
         thesisTriggeredAt: maxPassDate,
         thesisDeadline: thesisDeadline
       });
-      // 同时调用云端校验
-      _syncToCloud('users', 'update', {
-        thesisTriggeredAt: maxPassDate,
-        thesisDeadline: thesisDeadline
-      }, _openid);
       return { triggered: true, maxPassDate, thesisDeadline };
     } else {
       if (user.thesisTriggeredAt) {
@@ -284,38 +408,65 @@ export const Storage = {
     return { triggered: false };
   },
 
-  // 切换专业并重新初始化数据
-  switchMajor(majorKey) {
+  /**
+   * 切换专业：先乐观更新本地整包，再调用云函数原子切换；成功后以云端返回为准
+   * @returns {Promise<boolean>}
+   */
+  async switchMajor(majorKey) {
     if (!_openid) return false;
     if (!MAJOR_REGISTRY[majorKey]) return false;
-    const major = MAJOR_REGISTRY[majorKey];
-    // 更新用户专业信息（保留学籍日期）
-    this.updateUser({
+
+    const pkg = cloneMajorPackage(majorKey);
+    const current = this.getUser();
+    const nextRev = (current.majorRevision || 0) + 1;
+
+    // 1. 乐观更新本地整包（保证 UI 立即一致；revision 高于云端，防止半同步盖回）
+    const localUser = {
+      ...current,
       major: majorKey,
-      majorName: major.majorName,
-      school: major.school,
-      totalCreditsTarget: major.totalCreditsTarget,
+      majorName: pkg.major.majorName,
+      school: pkg.major.school,
+      totalCreditsTarget: pkg.major.totalCreditsTarget,
+      majorRevision: nextRev,
       thesisDeadline: null,
       thesisTriggeredAt: null
-    });
-    // 用新专业课程覆盖存储
-    const newCourses = JSON.parse(JSON.stringify(major.courses));
-    const newExams = JSON.parse(JSON.stringify(major.nationalExams));
-    wx.setStorageSync(keyOf(_openid, 'courses'), newCourses);
-    wx.setStorageSync(keyOf(_openid, 'national_exams'), newExams);
-    wx.setStorageSync(keyOf(_openid, 'thesis_flow'), JSON.parse(JSON.stringify(DEFAULT_THESIS_FLOW)));
-    // 云端同步：逐条写入新课程
-    for (const course of newCourses) {
-      _syncToCloud('courses', 'upsert', course, course.id);
+    };
+    const localThesis = JSON.parse(JSON.stringify(DEFAULT_THESIS_FLOW));
+    this._applyMajorPackage(localUser, pkg.courses, pkg.nationalExams, localThesis);
+
+    // 2. 云端原子切换
+    try {
+      const res = await wx.cloud.callFunction({
+        name: 'switchMajor',
+        data: { major: majorKey }
+      });
+      if (res.result && res.result.success && res.result.data) {
+        const data = res.result.data;
+        const cloudUser = {
+          ...localUser,
+          ...(data.user || {}),
+          major: majorKey,
+          majorName: pkg.major.majorName,
+          school: pkg.major.school,
+          totalCreditsTarget: pkg.major.totalCreditsTarget,
+          majorRevision: data.majorRevision || nextRev,
+          thesisDeadline: null,
+          thesisTriggeredAt: null
+        };
+        const courses = normalizeCourses(data.courses || pkg.courses, majorKey);
+        const exams = normalizeExams(data.nationalExams || pkg.nationalExams, majorKey);
+        const thesis = data.thesisFlow || localThesis;
+        this._applyMajorPackage(cloudUser, courses, exams, thesis);
+        return true;
+      }
+      console.warn('[switchMajor] 云函数返回失败，已保留本地整包:', res.result);
+      return true; // 本地已一致
+    } catch (err) {
+      console.warn('[switchMajor] 云函数调用失败，已保留本地整包:', err);
+      return true; // 离线也保证本地名称与课程一致
     }
-    for (const exam of newExams) {
-      _syncToCloud('national_exams', 'upsert', exam, exam.id);
-    }
-    _syncToCloud('thesis_flow', 'upsert', DEFAULT_THESIS_FLOW, `thesis_${_openid}`);
-    return true;
   },
 
-  // 重置回默认数据
   resetAll() {
     if (!_openid) return;
     this._initLocalDefaults();

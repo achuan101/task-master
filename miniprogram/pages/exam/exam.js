@@ -23,11 +23,6 @@ Page({
   },
 
   onLoad() {
-    // 从当前专业配置加载科目分类
-    const major = Storage.getCurrentMajor();
-    if (major.examCategories && major.examCategories.length > 0) {
-      this.setData({ categories: major.examCategories });
-    }
     this._waitForUserReady(() => this.loadData());
   },
 
@@ -58,6 +53,7 @@ Page({
   },
 
   loadData() {
+    const major = Storage.getCurrentMajor();
     const exams = Storage.getNationalExams();
     const courses = Storage.getCourses();
 
@@ -68,7 +64,7 @@ Page({
     const nonPoolPassed = nonPoolCourses.filter(c => c.status === 'passed').length;
     const nationalPassed = exams.filter(e => e.status === 'passed').length;
 
-    this.setData({
+    const patch = {
       nationalExams: exams,
       poolCourses,
       nonPoolCourses,
@@ -80,7 +76,11 @@ Page({
         nationalPassed,
         nationalTotal: exams.length
       }
-    });
+    };
+    if (major.examCategories && major.examCategories.length > 0) {
+      patch.categories = major.examCategories;
+    }
+    this.setData(patch);
   },
 
   switchTab(e) {

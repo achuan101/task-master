@@ -9,7 +9,7 @@ export const DEFAULT_USER = {
   thesisDeadline: null,
   thesisTriggeredAt: null,
   totalCreditsTarget: 35,
-  totalCoursesTarget: 14,
+  majorRevision: 0,
   onboardingComplete: false
 };
 
@@ -303,6 +303,7 @@ export const MAJOR_REGISTRY = {
   big_data: {
     majorName: '大数据专业',
     school: '中国人民大学·信息学院',
+    icon: '💻',
     totalCreditsTarget: 35,
     courses: BIG_DATA_COURSES,
     nationalExams: DEFAULT_NATIONAL_EXAMS,
@@ -319,6 +320,7 @@ export const MAJOR_REGISTRY = {
   management_science: {
     majorName: '管理科学与工程专业',
     school: '中国人民大学·信息学院',
+    icon: '📚',
     totalCreditsTarget: 41,
     courses: MANAGEMENT_SCIENCE_COURSES,
     nationalExams: MANAGEMENT_NATIONAL_EXAMS,
@@ -369,7 +371,7 @@ export const ANNUAL_EVENTS = [
     day: 23,
     type: "national",
     tag: "5月国考",
-    desc: "外国语水平考试 + 计算机科学与技术学科综合"
+    desc: "外国语水平考试 + 学科综合水平考试"
   },
   {
     id: "ev_4",
