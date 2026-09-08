@@ -9,13 +9,7 @@ Page({
     poolCourses: [],
     nonPoolCourses: [],
     categories: [
-      { key: 'all', name: '全部科目' },
-      { key: 'major_core', name: '专业课' },
-      { key: 'subject_base', name: '学科基础课' },
-      { key: 'politics', name: '政治理论课' },
-      { key: 'method', name: '方法课' },
-      { key: 'elective', name: '选修课' },
-      { key: 'language', name: '第一外语' }
+      { key: 'all', name: '全部科目' }
     ],
     selectedCategory: 'all',
     stats: {
@@ -29,13 +23,32 @@ Page({
   },
 
   onLoad() {
-    this.loadData();
+    // 从当前专业配置加载科目分类
+    const major = Storage.getCurrentMajor();
+    if (major.examCategories && major.examCategories.length > 0) {
+      this.setData({ categories: major.examCategories });
+    }
+    this._waitForUserReady(() => this.loadData());
   },
 
   onShow() {
-    this.loadData();
+    this._waitForUserReady(() => this.loadData());
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 1 });
+    }
+  },
+
+  /**
+   * 等待用户初始化完成后再执行回调
+   */
+  _waitForUserReady(callback) {
+    const app = getApp();
+    if (app.globalData.openid) {
+      callback();
+    } else {
+      app.globalData.onUserReady = () => {
+        callback();
+      };
     }
   },
 

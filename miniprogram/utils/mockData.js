@@ -9,7 +9,8 @@ export const DEFAULT_USER = {
   thesisDeadline: null,
   thesisTriggeredAt: null,
   totalCreditsTarget: 35,
-  totalCoursesTarget: 14
+  totalCoursesTarget: 14,
+  onboardingComplete: false
 };
 
 export const BIG_DATA_COURSES = [
@@ -251,6 +252,35 @@ export const DEFAULT_THESIS_FLOW = {
       date: null
     }
   ]
+};
+
+// 专业注册表：每个专业一个独立配置块，新增专业只需在此添加一个 key
+export const MAJOR_REGISTRY = {
+  big_data: {
+    majorName: '大数据专业',
+    school: '中国人民大学·信息学院',
+    totalCreditsTarget: 35,
+    courses: BIG_DATA_COURSES,
+    nationalExams: DEFAULT_NATIONAL_EXAMS,
+    examCategories: [
+      { key: 'all', name: '全部科目' },
+      { key: 'major_core', name: '专业课' },
+      { key: 'subject_base', name: '学科基础课' },
+      { key: 'politics', name: '政治理论课' },
+      { key: 'method', name: '方法课' },
+      { key: 'elective', name: '选修课' },
+      { key: 'language', name: '第一外语' }
+    ]
+  }
+  // 未来新增专业示例：
+  // law: {
+  //   majorName: '法学专业',
+  //   school: '中国人民大学·法学院',
+  //   totalCreditsTarget: 30,
+  //   courses: LAW_COURSES,
+  //   nationalExams: LAW_NATIONAL_EXAMS,
+  //   examCategories: [...]
+  // }
 };
 
 export const ANNUAL_EVENTS = [

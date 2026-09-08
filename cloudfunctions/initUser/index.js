@@ -34,9 +34,10 @@ exports.main = async (event, context) => {
     // 显式声明 limit 避免默认的 20 条限制
     const templates = await db.collection('major_templates').where({ major: major }).limit(100).get();
     for (const item of templates.data) {
-      await db.collection('courses').add({
+      await db.collection('courses').doc(item._id).set({
         data: {
           _openid: openid,
+          id: item._id,
           courseCode: item.courseCode,
           courseName: item.courseName,
           category: item.category,
@@ -53,11 +54,11 @@ exports.main = async (event, context) => {
 
     // 4. 初始化国家统考（2门，各4次机会）
     const nationalExams = [
-      { subject: 'comprehensive', subjectName: '计算机科学与技术学科综合水平', status: 'pending', remainingAttempts: 4, attempts: [] },
-      { subject: 'foreign_lang', subjectName: '外国语水平考试 (英语)', status: 'pending', remainingAttempts: 4, attempts: [] }
+      { id: 'national_comp', subject: 'comprehensive', subjectName: '计算机科学与技术学科综合水平', status: 'pending', remainingAttempts: 4, attempts: [] },
+      { id: 'national_foreign', subject: 'foreign_lang', subjectName: '外国语水平考试 (英语)', status: 'pending', remainingAttempts: 4, attempts: [] }
     ];
     for (const exam of nationalExams) {
-      await db.collection('national_exams').add({
+      await db.collection('national_exams').doc(exam.id).set({
         data: {
           _openid: openid,
           major: major,

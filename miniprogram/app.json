@@ -57,6 +57,7 @@
     "t-skeleton": "tdesign-miniprogram/skeleton/skeleton",
     "t-empty": "tdesign-miniprogram/empty/empty"
   },
+  "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json",
   "style": "v2"
 }

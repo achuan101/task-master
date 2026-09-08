@@ -20,13 +20,27 @@ Page({
   },
 
   onLoad() {
-    this.loadData();
+    this._waitForUserReady(() => this.loadData());
   },
 
   onShow() {
-    this.loadData();
+    this._waitForUserReady(() => this.loadData());
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 2 });
+    }
+  },
+
+  /**
+   * 等待用户初始化完成后再执行回调
+   */
+  _waitForUserReady(callback) {
+    const app = getApp();
+    if (app.globalData.openid) {
+      callback();
+    } else {
+      app.globalData.onUserReady = () => {
+        callback();
+      };
     }
   },
 

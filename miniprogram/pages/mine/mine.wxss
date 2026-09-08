@@ -29,7 +29,7 @@
 .user-nickname {
   font-size: 32rpx;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #F8FAFC;
 }
 
 .tag-row {
@@ -45,13 +45,13 @@
 }
 
 .user-tag.school {
-  background: rgba(129, 140, 248, 0.15);
-  color: #A5B4FC;
+  background: rgba(129, 140, 248, 0.2);
+  color: #C7D2FE;
 }
 
 .user-tag.major {
-  background: rgba(56, 189, 248, 0.15);
-  color: var(--accent-cyan);
+  background: rgba(56, 189, 248, 0.2);
+  color: #7DD3FC;
 }
 
 /* 当前专业卡片 */
@@ -72,10 +72,17 @@
   line-height: 64rpx;
   font-size: 24rpx;
   font-weight: 600;
-  color: var(--accent-cyan);
-  background: rgba(14, 165, 233, 0.08);
-  border: 1px solid rgba(14, 165, 233, 0.25);
+  color: #7DD3FC;
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.3);
   border-radius: 12rpx;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.switch-major-btn::after {
+  display: none;
 }
 
 /* 专业列表 */
@@ -92,7 +99,21 @@
 
 .major-card.active-major {
   border-color: rgba(56, 189, 248, 0.4);
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(14, 165, 233, 0.08) 100%);
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(14, 165, 233, 0.12) 100%);
+}
+
+.major-card.active-major .major-name {
+  color: #F8FAFC;
+}
+
+.major-card.active-major .major-desc {
+  color: #94A3B8;
+}
+
+.major-card.active-major .status-pill.passed {
+  color: #34D399;
+  background: rgba(52, 211, 153, 0.2);
+  border-color: rgba(52, 211, 153, 0.35);
 }
 
 .major-card.disabled-major {

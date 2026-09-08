@@ -1,5 +1,154 @@
 /* miniprogram/pages/index/index.wxss */
 
+/* ========== 新用户引导弹窗 ========== */
+.onboarding-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx;
+}
+
+.onboarding-card {
+  background: var(--bg-card, #1a1a2e);
+  border: 1px solid var(--border-focus, rgba(56, 189, 248, 0.4));
+  border-radius: 32rpx;
+  padding: 48rpx 36rpx;
+  width: 100%;
+  max-width: 620rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.onboarding-logo {
+  font-size: 72rpx;
+  margin-bottom: 16rpx;
+}
+
+.onboarding-title {
+  font-size: 36rpx;
+  font-weight: 800;
+  color: var(--text-primary, #f0f0f0);
+  margin-bottom: 12rpx;
+}
+
+.onboarding-desc {
+  font-size: 24rpx;
+  color: var(--text-muted, #888);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 32rpx;
+}
+
+.onboarding-majors {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  margin-bottom: 28rpx;
+}
+
+.major-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  border: 2rpx solid var(--border-subtle, rgba(255,255,255,0.1));
+  background: var(--bg-secondary, rgba(255,255,255,0.03));
+  transition: all 0.2s ease;
+}
+
+.major-option.active {
+  border-color: var(--accent-cyan, #38BDF8);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.major-option-left {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.major-option-icon {
+  font-size: 40rpx;
+}
+
+.major-option-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.major-option-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary, #f0f0f0);
+}
+
+.major-option-school {
+  font-size: 22rpx;
+  color: var(--text-muted, #888);
+}
+
+.major-option-check {
+  font-size: 32rpx;
+  color: var(--accent-cyan, #38BDF8);
+  font-weight: 700;
+}
+
+.onboarding-dates {
+  width: 100%;
+  margin-bottom: 32rpx;
+}
+
+.date-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16rpx 20rpx;
+  border-radius: 12rpx;
+  border: 1px solid var(--border-subtle, rgba(255,255,255,0.1));
+  background: var(--bg-secondary, rgba(255,255,255,0.03));
+}
+
+.date-label {
+  font-size: 26rpx;
+  color: var(--text-secondary, #ccc);
+  font-weight: 600;
+}
+
+.date-picker {
+  font-size: 26rpx;
+  color: var(--accent-cyan, #38BDF8);
+  font-weight: 600;
+}
+
+.onboarding-btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  border-radius: 44rpx;
+  background: linear-gradient(135deg, #38BDF8 0%, #818CF8 100%);
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 700;
+  border: none;
+  letter-spacing: 2rpx;
+}
+
+.onboarding-btn[disabled] {
+  opacity: 0.5;
+  background: var(--text-muted, #888);
+}
+
 .header-section {
   padding: 16rpx 0 28rpx;
 }

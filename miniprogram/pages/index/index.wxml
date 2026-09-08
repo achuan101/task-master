@@ -1,4 +1,40 @@
 <!-- miniprogram/pages/index/index.wxml -->
+
+<!-- 新用户引导弹窗 -->
+<view class="onboarding-overlay" wx:if="{{showOnboarding}}">
+  <view class="onboarding-card">
+    <view class="onboarding-logo">🎓</view>
+    <text class="onboarding-title">欢迎使用 MasterPlan</text>
+    <text class="onboarding-desc">同等学力申硕备考规划助手\n请先选择你的专业方向</text>
+
+    <view class="onboarding-majors">
+      <block wx:for="{{majorList}}" wx:key="key">
+        <view class="major-option {{selectedMajor === item.key ? 'active' : ''}}" bindtap="selectMajor" data-key="{{item.key}}">
+          <view class="major-option-left">
+            <text class="major-option-icon">{{item.icon}}</text>
+            <view class="major-option-info">
+              <text class="major-option-name">{{item.majorName}}</text>
+              <text class="major-option-school">{{item.school}}</text>
+            </view>
+          </view>
+          <view class="major-option-check" wx:if="{{selectedMajor === item.key}}">✓</view>
+        </view>
+      </block>
+    </view>
+
+    <view class="onboarding-dates">
+      <view class="date-field">
+        <text class="date-label">入学时间</text>
+        <picker mode="date" value="{{onboardEnrollDate}}" start="2020-01-01" end="2030-12-31" bindchange="onOnboardEnrollChange">
+          <view class="date-picker">{{onboardEnrollDate}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <button class="onboarding-btn" bindtap="confirmOnboarding" disabled="{{!selectedMajor}}">开始规划我的申硕之路</button>
+  </view>
+</view>
+
 <view class="page-container">
   <!-- 1. 顶栏欢迎区 -->
   <view class="header-section flex-between">

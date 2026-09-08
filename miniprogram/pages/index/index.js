@@ -1,6 +1,15 @@
 // miniprogram/pages/index/index.js
 import { Storage } from '../../utils/storage.js';
+import { MAJOR_REGISTRY } from '../../utils/mockData.js';
 import { calculateLifeline, getUpcomingEvents, calculateThesisCountdown } from '../../utils/timeCalculator.js';
+
+// 构建专业列表（从 MAJOR_REGISTRY 提取）
+const MAJOR_LIST = Object.keys(MAJOR_REGISTRY).map(key => ({
+  key,
+  majorName: MAJOR_REGISTRY[key].majorName,
+  school: MAJOR_REGISTRY[key].school,
+  icon: key === 'big_data' ? '💻' : '📚'
+}));
 
 Page({
   data: {
@@ -20,18 +29,49 @@ Page({
       thesisCountdown: null
     },
     upcomingEvents: [],
-    loading: false
+    loading: false,
+    // 新用户引导
+    showOnboarding: false,
+    majorList: MAJOR_LIST,
+    selectedMajor: '',
+    onboardEnrollDate: '2026-09-01'
   },
 
   onLoad() {
-    this.refreshDashboard();
+    this._waitForUserReady(() => {
+      const user = Storage.getUser();
+      if (!user.onboardingComplete) {
+        // 新用户：显示引导弹窗
+        this.setData({
+          showOnboarding: true,
+          selectedMajor: user.major || 'big_data',
+          onboardEnrollDate: user.enrollDate || '2026-09-01'
+        });
+      } else {
+        this.refreshDashboard();
+      }
+    });
   },
 
   onShow() {
     // 每次切换回首页时刷新，确保其他页面打卡后的数据立即反映在首页上
-    this.refreshDashboard();
+    this._waitForUserReady(() => this.refreshDashboard());
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 });
+    }
+  },
+
+  /**
+   * 等待用户初始化完成后再执行回调
+   */
+  _waitForUserReady(callback) {
+    const app = getApp();
+    if (app.globalData.openid) {
+      callback();
+    } else {
+      app.globalData.onUserReady = () => {
+        callback();
+      };
     }
   },
 
@@ -114,5 +154,39 @@ Page({
 
   navigateToSettings() {
     wx.switchTab({ url: '/pages/mine/mine' });
+  },
+
+  // ========== 新用户引导 ==========
+
+  selectMajor(e) {
+    const key = e.currentTarget.dataset.key;
+    this.setData({ selectedMajor: key });
+  },
+
+  onOnboardEnrollChange(e) {
+    this.setData({ onboardEnrollDate: e.detail.value });
+  },
+
+  confirmOnboarding() {
+    const majorKey = this.data.selectedMajor;
+    if (!majorKey) return;
+
+    const major = MAJOR_REGISTRY[majorKey];
+    // 保存专业选择与入学时间
+    Storage.updateUser({
+      major: majorKey,
+      majorName: major.majorName,
+      school: major.school,
+      totalCreditsTarget: major.totalCreditsTarget,
+      enrollDate: this.data.onboardEnrollDate,
+      onboardingComplete: true
+    });
+    // 切换专业课程数据
+    Storage.switchMajor(majorKey);
+
+    this.setData({ showOnboarding: false });
+    this.refreshDashboard();
+
+    wx.showToast({ title: '欢迎开始规划！', icon: 'success' });
   }
 });
