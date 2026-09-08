@@ -21,6 +21,25 @@ const BIG_DATA_TEMPLATES = [
   { courseCode: "100900009", courseName: "学术规范和论文写作", category: "method", categoryName: "方法课", credit: 1, examType: "non_pool" }
 ];
 
+const MANAGEMENT_SCIENCE_TEMPLATES = [
+  { courseCode: "101700702", courseName: "CIO与IT治理", category: "major_core", categoryName: "专业课", credit: 3, examType: "pool" },
+  { courseCode: "101700028", courseName: "IT项目管理", category: "major_core", categoryName: "专业课", credit: 2, examType: "pool" },
+  { courseCode: "101700035", courseName: "高级信息系统", category: "subject_base", categoryName: "学科基础课", credit: 3, examType: "pool" },
+  { courseCode: "100100301", courseName: "新时代中国特色社会主义理论与实践", category: "politics", categoryName: "政治理论课", credit: 2, examType: "pool" },
+  { courseCode: "101700703", courseName: "大数据推荐与决策", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool" },
+  { courseCode: "102100049", courseName: "社会网络分析", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool" },
+  { courseCode: "101700006", courseName: "博弈论与信息经济学", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool" },
+  { courseCode: "113700016", courseName: "自然辩证法概论", category: "politics", categoryName: "政治理论课", credit: 1, examType: "non_pool" },
+  { courseCode: "101700008", courseName: "电子政务", category: "elective", categoryName: "选修课", credit: 2, examType: "non_pool" },
+  { courseCode: "101700010", courseName: "高级管理学", category: "subject_base", categoryName: "学科基础课", credit: 3, examType: "non_pool" },
+  { courseCode: "101800902", courseName: "企业战略管理", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool" },
+  { courseCode: "101700704", courseName: "知识与创新管理", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool" },
+  { courseCode: "100900009", courseName: "学术规范和论文写作", category: "method", categoryName: "方法课", credit: 1, examType: "non_pool" },
+  { courseCode: "101200001", courseName: "语言基础", category: "language", categoryName: "第一外语课", credit: 3, examType: "non_pool" },
+  { courseCode: "101700004", courseName: "现代统计方法", category: "method", categoryName: "方法课", credit: 3, examType: "non_pool" },
+  { courseCode: "101700005", courseName: "管理研究方法论", category: "method", categoryName: "方法课", credit: 3, examType: "non_pool" }
+];
+
 // 年度周期固定备考日历
 const ANNUAL_EVENTS = [
   { eventType: "national_exam_signup", eventName: "国考报名", recurringMonth: 3, recurringDay: 8, reminderDaysBefore: 7, tag: "国考报名", description: "每年3月初全国统考报名" },
@@ -45,18 +64,29 @@ exports.main = async (event, context) => {
       });
     }
 
-    // 2. 批量写入 events
-    for (const ev of ANNUAL_EVENTS) {
-      await db.collection('events').doc(ev.eventType).set({
+    for (const item of MANAGEMENT_SCIENCE_TEMPLATES) {
+      const docId = `management_science_${item.courseCode}`;
+      await db.collection('major_templates').doc(docId).set({
         data: {
-          ...ev,
-          applicableMajors: ['big_data', 'computer_science', 'management'],
+          ...item,
+          major: 'management_science',
           createdAt: db.serverDate()
         }
       });
     }
 
-    return { success: true, message: '大数据专业14门课程与年度备考事件已成功写入云数据库！' };
+    // 2. 批量写入 events
+    for (const ev of ANNUAL_EVENTS) {
+      await db.collection('events').doc(ev.eventType).set({
+        data: {
+          ...ev,
+          applicableMajors: ['big_data', 'computer_science', 'management_science'],
+          createdAt: db.serverDate()
+        }
+      });
+    }
+
+    return { success: true, message: '基础数据与专业课程（大数据/管理科学）及年度备考事件已成功写入云数据库！' };
   } catch (err) {
     return { success: false, error: err.message };
   }

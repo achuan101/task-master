@@ -74,7 +74,7 @@ Page({
     if (availableKeys.length === 0) {
       wx.showModal({
         title: '暂无其他专业',
-        content: '目前仅支持大数据专业，其他专业即将上线！',
+        content: '暂无其他可选专业，更多专业即将上线！',
         showCancel: false,
         confirmText: '我知道了'
       });

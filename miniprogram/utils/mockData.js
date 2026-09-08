@@ -184,12 +184,56 @@ export const BIG_DATA_COURSES = [
   }
 ];
 
+export const MANAGEMENT_SCIENCE_COURSES = [
+  { id: "101700702", courseCode: "101700702", courseName: "CIO与IT治理", category: "major_core", categoryName: "专业课", credit: 3, examType: "pool", status: "pending", passDate: null, score: null },
+  { id: "101700028", courseCode: "101700028", courseName: "IT项目管理", category: "major_core", categoryName: "专业课", credit: 2, examType: "pool", status: "pending", passDate: null, score: null },
+  { id: "101700035", courseCode: "101700035", courseName: "高级信息系统", category: "subject_base", categoryName: "学科基础课", credit: 3, examType: "pool", status: "pending", passDate: null, score: null },
+  { id: "100100301", courseCode: "100100301", courseName: "新时代中国特色社会主义理论与实践", category: "politics", categoryName: "政治理论课", credit: 2, examType: "pool", status: "pending", passDate: null, score: null },
+  { id: "101700703", courseCode: "101700703", courseName: "大数据推荐与决策", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "102100049", courseCode: "102100049", courseName: "社会网络分析", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700006", courseCode: "101700006", courseName: "博弈论与信息经济学", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "113700016", courseCode: "113700016", courseName: "自然辩证法概论", category: "politics", categoryName: "政治理论课", credit: 1, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700008", courseCode: "101700008", courseName: "电子政务", category: "elective", categoryName: "选修课", credit: 2, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700010", courseCode: "101700010", courseName: "高级管理学", category: "subject_base", categoryName: "学科基础课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101800902", courseCode: "101800902", courseName: "企业战略管理", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700704", courseCode: "101700704", courseName: "知识与创新管理", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "100900009", courseCode: "100900009", courseName: "学术规范和论文写作", category: "method", categoryName: "方法课", credit: 1, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101200001", courseCode: "101200001", courseName: "语言基础", category: "language", categoryName: "第一外语课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700004", courseCode: "101700004", courseName: "现代统计方法", category: "method", categoryName: "方法课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700005", courseCode: "101700005", courseName: "管理研究方法论", category: "method", categoryName: "方法课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null }
+];
+
 export const DEFAULT_NATIONAL_EXAMS = [
   {
     id: "national_comp",
     subject: "comprehensive",
     subjectName: "计算机科学与技术学科综合水平",
     status: "pending", // pending / passed
+    passDate: null,
+    score: null,
+    maxAttempts: 4,
+    remainingAttempts: 4,
+    attempts: []
+  },
+  {
+    id: "national_foreign",
+    subject: "foreign_lang",
+    subjectName: "外国语水平考试 (英语)",
+    status: "pending",
+    passDate: null,
+    score: null,
+    maxAttempts: 4,
+    remainingAttempts: 4,
+    attempts: []
+  }
+];
+
+export const MANAGEMENT_NATIONAL_EXAMS = [
+  {
+    id: "national_comp",
+    subject: "comprehensive",
+    subjectName: "管理科学与工程学科综合水平",
+    status: "pending",
     passDate: null,
     score: null,
     maxAttempts: 4,
@@ -262,6 +306,22 @@ export const MAJOR_REGISTRY = {
     totalCreditsTarget: 35,
     courses: BIG_DATA_COURSES,
     nationalExams: DEFAULT_NATIONAL_EXAMS,
+    examCategories: [
+      { key: 'all', name: '全部科目' },
+      { key: 'major_core', name: '专业课' },
+      { key: 'subject_base', name: '学科基础课' },
+      { key: 'politics', name: '政治理论课' },
+      { key: 'method', name: '方法课' },
+      { key: 'elective', name: '选修课' },
+      { key: 'language', name: '第一外语' }
+    ]
+  },
+  management_science: {
+    majorName: '管理科学与工程专业',
+    school: '中国人民大学·信息学院',
+    totalCreditsTarget: 41,
+    courses: MANAGEMENT_SCIENCE_COURSES,
+    nationalExams: MANAGEMENT_NATIONAL_EXAMS,
     examCategories: [
       { key: 'all', name: '全部科目' },
       { key: 'major_core', name: '专业课' },

@@ -20,12 +20,12 @@ exports.main = async (event, context) => {
       _id: openid,
       nickName: event.nickName || '信息学院同等学力同学',
       major: major,
-      majorName: major === 'big_data' ? '大数据专业' : major,
+      majorName: major === 'big_data' ? '大数据专业' : (major === 'management_science' ? '管理科学与工程专业' : major),
       enrollDate: event.enrollDate || '2026-09-01',
       deadlineDate: event.deadlineDate || '2030-09-01',
       thesisDeadline: null,
       thesisTriggeredAt: null,
-      totalCreditsTarget: 35,
+      totalCreditsTarget: major === 'management_science' ? 41 : 35,
       createdAt: db.serverDate()
     };
     await db.collection('users').doc(openid).set({ data: defaultUser });
@@ -53,7 +53,10 @@ exports.main = async (event, context) => {
     }
 
     // 4. 初始化国家统考（2门，各4次机会）
-    const nationalExams = [
+    const nationalExams = major === 'management_science' ? [
+      { id: 'national_comp', subject: 'comprehensive', subjectName: '管理科学与工程学科综合水平', status: 'pending', remainingAttempts: 4, attempts: [] },
+      { id: 'national_foreign', subject: 'foreign_lang', subjectName: '外国语水平考试 (英语)', status: 'pending', remainingAttempts: 4, attempts: [] }
+    ] : [
       { id: 'national_comp', subject: 'comprehensive', subjectName: '计算机科学与技术学科综合水平', status: 'pending', remainingAttempts: 4, attempts: [] },
       { id: 'national_foreign', subject: 'foreign_lang', subjectName: '外国语水平考试 (英语)', status: 'pending', remainingAttempts: 4, attempts: [] }
     ];
