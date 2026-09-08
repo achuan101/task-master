@@ -1,0 +1,5 @@
+# 微信开发者工具会自动将换行符重写为 CRLF，
+# 以下配置文件强制保持 LF，避免无意义的 diff
+
+project.config.json text eol=lf
+miniprogram/project.config.json text eol=lf

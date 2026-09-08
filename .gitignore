@@ -6,3 +6,7 @@ miniprogram/miniprogram_npm/
 .vscode/
 .agents/
 .claude/
+
+# 微信开发者工具本地个人配置（因人而异，无需提交）
+project.private.config.json
+miniprogram/project.private.config.json
