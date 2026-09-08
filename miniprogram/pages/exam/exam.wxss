@@ -33,48 +33,7 @@
   background: var(--border-subtle);
 }
 
-/* 选项卡切换器 */
-.custom-tabs {
-  display: flex;
-  background: var(--bg-secondary);
-  border-radius: 16rpx;
-  padding: 8rpx;
-  margin-bottom: 20rpx;
-  border: 1px solid var(--border-subtle);
-}
 
-.tab-btn {
-  flex: 1;
-  text-align: center;
-  padding: 16rpx 0;
-  font-size: 24rpx;
-  font-weight: 600;
-  color: var(--text-secondary);
-  border-radius: 12rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8rpx;
-  transition: all 0.2s ease;
-}
-
-.tab-btn.active {
-  background: var(--bg-card);
-  color: var(--accent-cyan);
-  box-shadow: 0 2px 8rpx rgba(0, 0, 0, 0.4);
-}
-
-.tab-badge {
-  font-size: 20rpx;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2rpx 8rpx;
-  border-radius: 999rpx;
-}
-
-.tab-btn.active .tab-badge {
-  background: rgba(56, 189, 248, 0.2);
-  color: var(--accent-cyan);
-}
 
 /* 提示警示条 */
 .tab-desc-alert {
@@ -130,10 +89,23 @@
 }
 
 /* 考试卡片 */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .exam-card {
   margin-bottom: 20rpx;
   padding: 28rpx;
+  opacity: 0;
+  animation: fadeInUp 0.4s ease-out forwards;
 }
+
+.exam-card:nth-child(1) { animation-delay: 0.05s; }
+.exam-card:nth-child(2) { animation-delay: 0.1s; }
+.exam-card:nth-child(3) { animation-delay: 0.15s; }
+.exam-card:nth-child(4) { animation-delay: 0.2s; }
+.exam-card:nth-child(n+5) { animation-delay: 0.25s; }
 
 .exam-card.card-passed {
   border-color: rgba(52, 211, 153, 0.3);
@@ -157,27 +129,7 @@
   color: var(--text-primary);
 }
 
-.exam-tag {
-  font-size: 20rpx;
-  padding: 4rpx 10rpx;
-  border-radius: 6rpx;
-  font-weight: 600;
-}
 
-.exam-tag.national {
-  background: rgba(251, 191, 36, 0.2);
-  color: var(--accent-gold);
-}
-
-.exam-tag.pool {
-  background: rgba(56, 189, 248, 0.2);
-  color: var(--accent-cyan);
-}
-
-.exam-tag.non-pool {
-  background: rgba(148, 163, 184, 0.2);
-  color: var(--text-secondary);
-}
 
 .course-meta-row {
   margin-bottom: 20rpx;
@@ -185,7 +137,7 @@
   color: var(--text-muted);
 }
 
-.credit-text, .credit-pill {
+.credit-text {
   font-size: 22rpx;
   color: var(--accent-cyan);
   font-weight: 600;

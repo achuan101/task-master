@@ -68,7 +68,7 @@ Page({
   },
 
   switchTab(e) {
-    const tab = e.currentTarget.dataset.tab;
+    const tab = e.detail.value || (e.currentTarget && e.currentTarget.dataset.tab);
     this.setData({ activeTab: tab });
   },
 

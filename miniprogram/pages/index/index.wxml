@@ -19,8 +19,8 @@
   <view class="glass-card lifeline-card">
     <view class="lifeline-header flex-between">
       <view class="lifeline-title">
-        <text class="lifeline-icon">⏳</text>
-        <text>4年学籍生命线</text>
+        <t-icon name="time" size="32rpx" color="var(--text-secondary)" />
+        <text style="margin-left:8rpx;">4年学籍生命线</text>
       </view>
       <view class="status-badge {{lifeline.status}}">
         {{lifeline.statusText}}
@@ -38,12 +38,9 @@
 
       <!-- 进度条 -->
       <view class="progress-wrapper">
-        <view class="progress-bar-bg">
-          <view class="progress-bar-fill" style="width: {{lifeline.percentage}}%"></view>
-        </view>
+        <t-progress percentage="{{lifeline.percentage}}" color="#38BDF8" trackColor="rgba(255, 255, 255, 0.08)" strokeWidth="12" />
         <view class="progress-label flex-between">
           <text>已消耗 {{lifeline.elapsedDays}} 天</text>
-          <text>{{lifeline.percentage}}%</text>
         </view>
       </view>
     </view>
@@ -52,8 +49,8 @@
   <!-- 3. 四大核心支柱进度矩阵 (2x2) -->
   <view class="section-header">
     <view class="section-title">
-      <text class="section-icon">📊</text>
-      <text>核心阶段攻坚盘</text>
+      <t-icon name="chart-bar" size="36rpx" color="var(--text-primary)" />
+      <text style="margin-left:8rpx;">核心阶段攻坚盘</text>
     </view>
     <text class="section-subtitle">点击直达各模块打卡</text>
   </view>
@@ -63,14 +60,14 @@
     <view class="pillar-card" bindtap="navigateToExam">
       <view class="pillar-top flex-between">
         <text class="pillar-title">课程学分</text>
-        <text class="pillar-tag">{{stats.passedCourses}}/{{stats.totalCourses}}门</text>
+        <t-tag variant="light-outline" theme="default">{{stats.passedCourses}}/{{stats.totalCourses}}门</t-tag>
       </view>
-      <view class="pillar-value">
-        <text class="big-num">{{stats.earnedCredits}}</text>
-        <text class="unit-text">/{{stats.totalCredits}} 学分</text>
-      </view>
-      <view class="mini-progress">
-        <view class="mini-fill" style="width: {{stats.courseProgress}}%"></view>
+      <view class="pillar-value flex-between" style="align-items: center; margin-top: 20rpx;">
+        <view>
+          <text class="big-num">{{stats.earnedCredits}}</text>
+          <text class="unit-text">/{{stats.totalCredits}} 学分</text>
+        </view>
+        <t-progress type="circle" percentage="{{stats.courseProgress}}" color="#0EA5E9" trackColor="rgba(14, 165, 233, 0.15)" strokeWidth="8" style="--td-progress-circle-size: 80rpx;" />
       </view>
       <view class="pillar-footer">
         <text>{{stats.poolTotal}}门题库 + {{stats.nonPoolTotal}}门非题库</text>
@@ -81,7 +78,7 @@
     <view class="pillar-card" bindtap="navigateToExam">
       <view class="pillar-top flex-between">
         <text class="pillar-title">国家统考</text>
-        <text class="pillar-tag national">5月统考</text>
+        <t-tag variant="light-outline" theme="warning">5月统考</t-tag>
       </view>
       <view class="pillar-value">
         <text class="big-num">{{stats.passedExams}}</text>
@@ -96,10 +93,10 @@
     <view class="pillar-card" bindtap="navigateToThesis">
       <view class="pillar-top flex-between">
         <text class="pillar-title">学术小论文</text>
-        <text class="pillar-tag thesis">前置卡点</text>
+        <t-tag variant="light-outline" theme="primary">前置卡点</t-tag>
       </view>
       <view class="pillar-value">
-        <text class="status-pill {{stats.paperPassed ? 'passed' : 'active'}}">{{stats.paperStatusText}}</text>
+        <t-tag theme="{{stats.paperPassed ? 'success' : 'primary'}}" variant="light">{{stats.paperStatusText}}</t-tag>
       </view>
       <view class="pillar-footer">
         <text>答辩前需公开发表≥3000字</text>
@@ -110,14 +107,14 @@
     <view class="pillar-card" bindtap="navigateToThesis">
       <view class="pillar-top flex-between">
         <text class="pillar-title">学位大论文</text>
-        <text class="pillar-tag thesis">1.5年时限</text>
+        <t-tag variant="light-outline" theme="primary">1.5年时限</t-tag>
       </view>
       <view class="pillar-value">
         <block wx:if="{{stats.thesisCountdown}}">
           <text class="countdown-warning">{{stats.thesisCountdown.remainingDays}}天</text>
         </block>
         <block wx:else>
-          <text class="status-pill lock">待考完全部激活</text>
+          <t-tag theme="default" variant="light">待考完全部激活</t-tag>
         </block>
       </view>
       <view class="pillar-footer">
@@ -129,32 +126,39 @@
   <!-- 4. 近期重要日程 (Upcoming Calendar) -->
   <view class="section-header">
     <view class="section-title">
-      <text class="section-icon">🗓️</text>
-      <text>年度备考关键窗口</text>
+      <t-icon name="calendar" size="36rpx" color="var(--text-primary)" />
+      <text style="margin-left:8rpx;">年度备考关键窗口</text>
     </view>
     <text class="section-subtitle">按时间先后排序</text>
   </view>
 
   <view class="events-list">
-    <block wx:for="{{upcomingEvents}}" wx:key="id">
-      <view class="event-item glass-card">
-        <view class="event-left">
-          <view class="event-tag-box {{item.type}}">
-            <text>{{item.tag}}</text>
+    <block wx:if="{{upcomingEvents.length > 0}}">
+      <block wx:for="{{upcomingEvents}}" wx:key="id">
+        <view class="event-item glass-card">
+          <view class="event-left">
+            <view class="event-tag-box {{item.type}}">
+              <text>{{item.tag}}</text>
+            </view>
+            <view class="event-info">
+              <text class="event-title">{{item.title}}</text>
+              <text class="event-desc">{{item.desc}}</text>
+            </view>
           </view>
-          <view class="event-info">
-            <text class="event-title">{{item.title}}</text>
-            <text class="event-desc">{{item.desc}}</text>
+          <view class="event-right">
+            <view class="days-badge">
+              <text class="days-prefix">还有</text>
+              <text class="days-count">{{item.daysLeft}}</text>
+              <text class="days-suffix">天</text>
+            </view>
+            <text class="event-date">{{item.targetDate}}</text>
           </view>
         </view>
-        <view class="event-right">
-          <view class="days-badge">
-            <text class="days-prefix">还有</text>
-            <text class="days-count">{{item.daysLeft}}</text>
-            <text class="days-suffix">天</text>
-          </view>
-          <text class="event-date">{{item.targetDate}}</text>
-        </view>
+      </block>
+    </block>
+    <block wx:else>
+      <view style="padding: 40rpx 0;">
+        <t-empty icon="calendar" description="近期暂无考核与日程，好好休息吧！" />
       </view>
     </block>
   </view>
@@ -162,8 +166,8 @@
   <!-- 5. 备考智囊提示卡 -->
   <view class="glass-card tip-card">
     <view class="tip-header">
-      <text class="tip-icon">💡</text>
-      <text class="tip-title">MasterPlan 申硕备考心法</text>
+      <t-icon name="tips" size="28rpx" color="var(--accent-gold)" />
+      <text class="tip-title" style="margin-left:8rpx;">MasterPlan 申硕备考心法</text>
     </view>
     <view class="tip-content">
       <text>• 统考与学校考试可并行准备，每年5月国考及4/10月题库考务必主动报考；</text>

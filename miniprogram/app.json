@@ -60,7 +60,9 @@
     "t-popup": "tdesign-miniprogram/popup/popup",
     "t-cell": "tdesign-miniprogram/cell/cell",
     "t-cell-group": "tdesign-miniprogram/cell-group/cell-group",
-    "t-badge": "tdesign-miniprogram/badge/badge"
+    "t-badge": "tdesign-miniprogram/badge/badge",
+    "t-skeleton": "tdesign-miniprogram/skeleton/skeleton",
+    "t-empty": "tdesign-miniprogram/empty/empty"
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2"

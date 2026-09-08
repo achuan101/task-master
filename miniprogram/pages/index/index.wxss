@@ -114,19 +114,6 @@
   margin-top: 16rpx;
 }
 
-.progress-bar-bg {
-  height: 12rpx;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 999rpx;
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #38BDF8 0%, #818CF8 50%, #FBBF24 100%);
-  border-radius: 999rpx;
-  transition: width 0.6s ease;
-}
 
 .progress-label {
   margin-top: 10rpx;
@@ -166,23 +153,6 @@
   font-weight: 600;
 }
 
-.pillar-tag {
-  font-size: 20rpx;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-secondary);
-  padding: 2rpx 10rpx;
-  border-radius: 6rpx;
-}
-
-.pillar-tag.national {
-  background: rgba(251, 191, 36, 0.15);
-  color: var(--accent-gold);
-}
-
-.pillar-tag.thesis {
-  background: rgba(129, 140, 248, 0.15);
-  color: #818CF8;
-}
 
 .pillar-value {
   margin: 12rpx 0 8rpx;
@@ -200,48 +170,12 @@
   margin-left: 6rpx;
 }
 
-.mini-progress {
-  height: 6rpx;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 999rpx;
-  overflow: hidden;
-  margin-bottom: 10rpx;
-}
-
-.mini-fill {
-  height: 100%;
-  background: var(--accent-cyan);
-  border-radius: 999rpx;
-}
 
 .pillar-footer {
   font-size: 20rpx;
   color: var(--text-muted);
 }
 
-.status-pill {
-  font-size: 24rpx;
-  padding: 6rpx 14rpx;
-  border-radius: 8rpx;
-  display: inline-block;
-  font-weight: 600;
-}
-
-.status-pill.active {
-  background: rgba(56, 189, 248, 0.12);
-  color: var(--accent-cyan);
-}
-
-.status-pill.passed {
-  background: rgba(52, 211, 153, 0.15);
-  color: var(--accent-green);
-}
-
-.status-pill.lock {
-  background: rgba(148, 163, 184, 0.1);
-  color: var(--text-muted);
-  font-size: 20rpx;
-}
 
 .countdown-warning {
   font-size: 32rpx;

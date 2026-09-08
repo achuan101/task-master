@@ -19,26 +19,19 @@
   </view>
 
   <!-- 选项卡切换 -->
-  <view class="custom-tabs">
-    <view class="tab-btn {{activeTab === 'national' ? 'active' : ''}}" bindtap="switchTab" data-tab="national">
-      <text>国家统考 (5月)</text>
-      <text class="tab-badge">{{stats.nationalPassed}}/{{stats.nationalTotal}}</text>
-    </view>
-    <view class="tab-btn {{activeTab === 'pool' ? 'active' : ''}}" bindtap="switchTab" data-tab="pool">
-      <text>题库考 (4/10月)</text>
-      <text class="tab-badge">{{stats.poolPassed}}/{{stats.poolTotal}}</text>
-    </view>
-    <view class="tab-btn {{activeTab === 'non_pool' ? 'active' : ''}}" bindtap="switchTab" data-tab="non_pool">
-      <text>非题库</text>
-      <text class="tab-badge">{{stats.nonPoolPassed}}/{{stats.nonPoolTotal}}</text>
-    </view>
+  <view style="margin-bottom: 24rpx; background: var(--bg-secondary); border-radius: 16rpx; overflow: hidden; border: 1px solid var(--border-subtle);">
+    <t-tabs value="{{activeTab}}" bind:change="switchTab" theme="card">
+      <t-tab-panel value="national" label="国家统考 (5月)" badge-props="{{ {count: stats.nationalPassed + '/' + stats.nationalTotal} }}"></t-tab-panel>
+      <t-tab-panel value="pool" label="题库考 (4/10月)" badge-props="{{ {count: stats.poolPassed + '/' + stats.poolTotal} }}"></t-tab-panel>
+      <t-tab-panel value="non_pool" label="非题库" badge-props="{{ {count: stats.nonPoolPassed + '/' + stats.nonPoolTotal} }}"></t-tab-panel>
+    </t-tabs>
   </view>
 
   <!-- 1. 国家统考列表 -->
   <block wx:if="{{activeTab === 'national'}}">
     <view class="tab-desc-alert">
-      <text class="alert-icon">⚠️</text>
-      <text>闭卷全国统考，每年5月仅举行1次，4年有效期内共4次机会（各门成绩60分合格有效）。</text>
+      <t-icon name="error-circle" size="32rpx" color="var(--accent-gold)" />
+      <text style="margin-left:8rpx;">闭卷全国统考，每年5月仅举行1次，4年有效期内共4次机会（各门成绩60分合格有效）。</text>
     </view>
 
     <view class="exam-list">
@@ -46,12 +39,12 @@
         <view class="exam-card glass-card {{item.status === 'passed' ? 'card-passed' : ''}}">
           <view class="exam-card-top flex-between">
             <view class="exam-main-title">
-              <text class="exam-tag national">统考</text>
+              <t-tag variant="light-outline" theme="warning">统考</t-tag>
               <text class="exam-name">{{item.subjectName}}</text>
             </view>
-            <view class="status-pill {{item.status === 'passed' ? 'passed' : 'pending'}}">
+            <t-tag theme="{{item.status === 'passed' ? 'success' : 'default'}}" variant="light">
               {{item.status === 'passed' ? '已通过' : '备考中'}}
-            </view>
+            </t-tag>
           </view>
 
           <!-- 4次机会指示灯 -->
@@ -91,8 +84,8 @@
   <!-- 2. 学校题库考列表 -->
   <block wx:if="{{activeTab === 'pool'}}">
     <view class="tab-desc-alert pool">
-      <text class="alert-icon">📘</text>
-      <text>学校统一组织题库闭卷考试，每年4月和10月可报考，原题抽取率高，建议尽早通关！</text>
+      <t-icon name="book" size="32rpx" color="var(--accent-cyan)" />
+      <text style="margin-left:8rpx;">学校统一组织题库闭卷考试，每年4月和10月可报考，原题抽取率高，建议尽早通关！</text>
     </view>
 
     <view class="exam-list">
@@ -100,12 +93,12 @@
         <view class="exam-card glass-card {{item.status === 'passed' ? 'card-passed' : ''}}">
           <view class="exam-card-top flex-between">
             <view class="exam-main-title">
-              <text class="exam-tag pool">题库</text>
+              <t-tag variant="light-outline" theme="primary">题库</t-tag>
               <text class="exam-name">{{item.courseName}}</text>
             </view>
-            <view class="status-pill {{item.status === 'passed' ? 'passed' : 'pending'}}">
+            <t-tag theme="{{item.status === 'passed' ? 'success' : 'default'}}" variant="light">
               {{item.status === 'passed' ? '已通过' : '未通过'}}
-            </view>
+            </t-tag>
           </view>
 
           <view class="course-meta-row flex-between">
@@ -136,8 +129,8 @@
   <!-- 3. 学院非题库课程列表 -->
   <block wx:if="{{activeTab === 'non_pool'}}">
     <view class="tab-desc-alert green">
-      <text class="alert-icon">📗</text>
-      <text>学院自主组织开卷考试或结课考核，包含专业课、方法课与选修课，通过门槛友好。</text>
+      <t-icon name="education" size="32rpx" color="var(--accent-green)" />
+      <text style="margin-left:8rpx;">学院自主组织开卷考试或结课考核，包含专业课、方法课与选修课，通过门槛友好。</text>
     </view>
 
     <!-- 分类筛选器 -->
@@ -159,17 +152,17 @@
           <view class="exam-card glass-card {{item.status === 'passed' ? 'card-passed' : ''}}">
             <view class="exam-card-top flex-between">
               <view class="exam-main-title">
-                <text class="exam-tag non-pool">{{item.categoryName}}</text>
+                <t-tag variant="light-outline" theme="success">{{item.categoryName}}</t-tag>
                 <text class="exam-name">{{item.courseName}}</text>
               </view>
-              <text class="credit-pill">{{item.credit}} 学分</text>
+              <t-tag variant="light" theme="default">{{item.credit}} 学分</t-tag>
             </view>
 
             <view class="course-meta-row flex-between">
               <text class="code-text">课程代号：{{item.courseCode}}</text>
-              <view class="status-pill {{item.status === 'passed' ? 'passed' : 'pending'}}">
+              <t-tag theme="{{item.status === 'passed' ? 'success' : 'default'}}" variant="light">
                 {{item.status === 'passed' ? '已通过' : '待考核'}}
-              </view>
+              </t-tag>
             </view>
 
             <view class="exam-card-footer flex-between">
