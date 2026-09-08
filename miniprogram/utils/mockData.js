@@ -228,11 +228,53 @@ export const DEFAULT_NATIONAL_EXAMS = [
   }
 ];
 
+export const COMPUTER_SCIENCE_COURSES = [
+  { id: "101700013", courseCode: "101700013", courseName: "网络与通信", category: "major_core", categoryName: "专业课", credit: 4, examType: "pool", status: "pending", passDate: null, score: null },
+  { id: "101700710", courseCode: "101700710", courseName: "数据库管理系统原理与实现", category: "subject_base", categoryName: "学科基础课", credit: 4, examType: "pool", status: "pending", passDate: null, score: null },
+  { id: "101700706", courseCode: "101700706", courseName: "软件工程与方法", category: "major_core", categoryName: "专业课", credit: 3, examType: "pool", status: "pending", passDate: null, score: null },
+  { id: "100100301", courseCode: "100100301", courseName: "新时代中国特色社会主义理论与实践", category: "politics", categoryName: "政治理论课", credit: 2, examType: "pool", status: "pending", passDate: null, score: null },
+  { id: "101700021", courseCode: "101700021", courseName: "组合数学", category: "elective", categoryName: "选修课", credit: 2, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "113700016", courseCode: "113700016", courseName: "自然辩证法概论", category: "politics", categoryName: "政治理论课", credit: 1, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101200001", courseCode: "101200001", courseName: "语言基础", category: "language", categoryName: "第一外语课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700709", courseCode: "101700709", courseName: "文本挖掘方法", category: "elective", categoryName: "选修课", credit: 2, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700022", courseCode: "101700022", courseName: "离散数学", category: "elective", categoryName: "选修课", credit: 2, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700707", courseCode: "101700707", courseName: "海量数据挖掘", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700714", courseCode: "101700714", courseName: "机器感知", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "100900009", courseCode: "100900009", courseName: "学术规范和论文写作", category: "method", categoryName: "方法课", credit: 1, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700711", courseCode: "101700711", courseName: "运筹学与优化理论", category: "method", categoryName: "方法课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null },
+  { id: "101700017", courseCode: "101700017", courseName: "高级操作系统", category: "subject_base", categoryName: "学科基础课", credit: 3, examType: "non_pool", status: "pending", passDate: null, score: null }
+];
+
 export const MANAGEMENT_NATIONAL_EXAMS = [
   {
     id: "national_comp",
     subject: "comprehensive",
     subjectName: "管理科学与工程学科综合水平",
+    status: "pending",
+    passDate: null,
+    score: null,
+    maxAttempts: 4,
+    remainingAttempts: 4,
+    attempts: []
+  },
+  {
+    id: "national_foreign",
+    subject: "foreign_lang",
+    subjectName: "外国语水平考试 (英语)",
+    status: "pending",
+    passDate: null,
+    score: null,
+    maxAttempts: 4,
+    remainingAttempts: 4,
+    attempts: []
+  }
+];
+
+export const COMPUTER_SCIENCE_NATIONAL_EXAMS = [
+  {
+    id: "national_comp",
+    subject: "comprehensive",
+    subjectName: "计算机科学与技术学科综合水平",
     status: "pending",
     passDate: null,
     score: null,
@@ -324,6 +366,23 @@ export const MAJOR_REGISTRY = {
     totalCreditsTarget: 41,
     courses: MANAGEMENT_SCIENCE_COURSES,
     nationalExams: MANAGEMENT_NATIONAL_EXAMS,
+    examCategories: [
+      { key: 'all', name: '全部科目' },
+      { key: 'major_core', name: '专业课' },
+      { key: 'subject_base', name: '学科基础课' },
+      { key: 'politics', name: '政治理论课' },
+      { key: 'method', name: '方法课' },
+      { key: 'elective', name: '选修课' },
+      { key: 'language', name: '第一外语' }
+    ]
+  },
+  computer_science: {
+    majorName: '计算机科学与技术专业',
+    school: '中国人民大学·信息学院',
+    icon: '💻',
+    totalCreditsTarget: 36,
+    courses: COMPUTER_SCIENCE_COURSES,
+    nationalExams: COMPUTER_SCIENCE_NATIONAL_EXAMS,
     examCategories: [
       { key: 'all', name: '全部科目' },
       { key: 'major_core', name: '专业课' },

@@ -40,6 +40,23 @@ const MANAGEMENT_SCIENCE_TEMPLATES = [
   { courseCode: "101700005", courseName: "管理研究方法论", category: "method", categoryName: "方法课", credit: 3, examType: "non_pool" }
 ];
 
+const COMPUTER_SCIENCE_TEMPLATES = [
+  { courseCode: "101700013", courseName: "网络与通信", category: "major_core", categoryName: "专业课", credit: 4, examType: "pool" },
+  { courseCode: "101700710", courseName: "数据库管理系统原理与实现", category: "subject_base", categoryName: "学科基础课", credit: 4, examType: "pool" },
+  { courseCode: "101700706", courseName: "软件工程与方法", category: "major_core", categoryName: "专业课", credit: 3, examType: "pool" },
+  { courseCode: "100100301", courseName: "新时代中国特色社会主义理论与实践", category: "politics", categoryName: "政治理论课", credit: 2, examType: "pool" },
+  { courseCode: "101700021", courseName: "组合数学", category: "elective", categoryName: "选修课", credit: 2, examType: "non_pool" },
+  { courseCode: "113700016", courseName: "自然辩证法概论", category: "politics", categoryName: "政治理论课", credit: 1, examType: "non_pool" },
+  { courseCode: "101200001", courseName: "语言基础", category: "language", categoryName: "第一外语课", credit: 3, examType: "non_pool" },
+  { courseCode: "101700709", courseName: "文本挖掘方法", category: "elective", categoryName: "选修课", credit: 2, examType: "non_pool" },
+  { courseCode: "101700022", courseName: "离散数学", category: "elective", categoryName: "选修课", credit: 2, examType: "non_pool" },
+  { courseCode: "101700707", courseName: "海量数据挖掘", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool" },
+  { courseCode: "101700714", courseName: "机器感知", category: "major_core", categoryName: "专业课", credit: 3, examType: "non_pool" },
+  { courseCode: "100900009", courseName: "学术规范和论文写作", category: "method", categoryName: "方法课", credit: 1, examType: "non_pool" },
+  { courseCode: "101700711", courseName: "运筹学与优化理论", category: "method", categoryName: "方法课", credit: 3, examType: "non_pool" },
+  { courseCode: "101700017", courseName: "高级操作系统", category: "subject_base", categoryName: "学科基础课", credit: 3, examType: "non_pool" }
+];
+
 // 年度周期固定备考日历
 const ANNUAL_EVENTS = [
   { eventType: "national_exam_signup", eventName: "国考报名", recurringMonth: 3, recurringDay: 8, reminderDaysBefore: 7, tag: "国考报名", description: "每年3月初全国统考报名" },
@@ -70,6 +87,17 @@ exports.main = async (event, context) => {
         data: {
           ...item,
           major: 'management_science',
+          createdAt: db.serverDate()
+        }
+      });
+    }
+
+    for (const item of COMPUTER_SCIENCE_TEMPLATES) {
+      const docId = `computer_science_${item.courseCode}`;
+      await db.collection('major_templates').doc(docId).set({
+        data: {
+          ...item,
+          major: 'computer_science',
           createdAt: db.serverDate()
         }
       });
