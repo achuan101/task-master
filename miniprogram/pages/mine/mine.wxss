@@ -54,6 +54,30 @@
   color: var(--accent-cyan);
 }
 
+/* 当前专业卡片 */
+.major-current {
+  padding: 24rpx 28rpx;
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.major-switch-row {
+  margin-top: 16rpx;
+  padding-top: 16rpx;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.switch-major-btn {
+  width: 100%;
+  height: 64rpx;
+  line-height: 64rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  border-radius: 12rpx;
+}
+
 /* 专业列表 */
 .major-list {
   display: flex;

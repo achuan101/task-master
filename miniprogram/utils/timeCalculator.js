@@ -25,7 +25,7 @@ export function diffDays(startDate, endDate) {
 }
 
 /**
- * 计算 4 年申硕大盘生命线进度
+ * 计算 4 年申硕进度线
  * @param {string} enrollDate 入学/起算日期 (例如 '2026-09-01')
  * @param {string} deadlineDate 4年到期日 (例如 '2030-09-01')
  */

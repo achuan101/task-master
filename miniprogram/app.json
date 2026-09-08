@@ -15,6 +15,7 @@
     "backgroundColor": "@bgColor"
   },
   "tabBar": {
+    "custom": true,
     "color": "@tabColor",
     "selectedColor": "@tabSelectedColor",
     "backgroundColor": "@tabBgColor",
@@ -22,27 +23,19 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "text": "大盘",
-        "iconPath": "@iconHome",
-        "selectedIconPath": "@iconHomeActive"
+        "text": "首页"
       },
       {
         "pagePath": "pages/exam/exam",
-        "text": "考试",
-        "iconPath": "@iconExam",
-        "selectedIconPath": "@iconExamActive"
+        "text": "考试"
       },
       {
         "pagePath": "pages/thesis/thesis",
-        "text": "论文",
-        "iconPath": "@iconThesis",
-        "selectedIconPath": "@iconThesisActive"
+        "text": "论文"
       },
       {
         "pagePath": "pages/mine/mine",
-        "text": "设置",
-        "iconPath": "@iconMine",
-        "selectedIconPath": "@iconMineActive"
+        "text": "我的"
       }
     ]
   },

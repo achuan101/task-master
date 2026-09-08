@@ -57,7 +57,7 @@ page {
 /* 页面通用容器 */
 .page-container {
   min-height: 100vh;
-  padding: 24rpx 32rpx 100rpx;
+  padding: 24rpx 32rpx calc(120rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 

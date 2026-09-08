@@ -4,7 +4,7 @@ import { formatDate } from '../../utils/timeCalculator.js';
 
 Page({
   data: {
-    activeTab: 'national', // national(国考) / pool(题库考) / non_pool(非题库考)
+    activeTab: 'pool', // pool(题库考) / non_pool(非题库) / national(国考)
     nationalExams: [],
     poolCourses: [],
     nonPoolCourses: [],
@@ -34,6 +34,9 @@ Page({
 
   onShow() {
     this.loadData();
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 });
+    }
   },
 
   onPullDownRefresh() {

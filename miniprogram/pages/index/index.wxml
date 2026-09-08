@@ -15,12 +15,12 @@
     <image class="header-logo" src="/assets/logo.jpg" mode="aspectFill" bindtap="navigateToSettings"></image>
   </view>
 
-  <!-- 2. 全局生命线 Hero Card (4年倒计时) -->
+  <!-- 2. 4年进度线 Hero Card -->
   <view class="glass-card lifeline-card">
     <view class="lifeline-header flex-between">
       <view class="lifeline-title">
         <t-icon name="time" size="32rpx" color="var(--text-secondary)" />
-        <text style="margin-left:8rpx;">4年学籍生命线</text>
+        <text style="margin-left:8rpx;">4年进度线</text>
       </view>
       <view class="status-badge {{lifeline.status}}">
         {{lifeline.statusText}}
@@ -38,7 +38,7 @@
 
       <!-- 进度条 -->
       <view class="progress-wrapper">
-        <t-progress percentage="{{lifeline.percentage}}" color="#38BDF8" trackColor="rgba(255, 255, 255, 0.08)" strokeWidth="12" />
+        <t-progress percentage="{{lifeline.percentage}}" color="var(--accent-cyan)" trackColor="var(--border-subtle)" strokeWidth="12" />
         <view class="progress-label flex-between">
           <text>已消耗 {{lifeline.elapsedDays}} 天</text>
         </view>
@@ -163,15 +163,4 @@
     </block>
   </view>
 
-  <!-- 5. 备考智囊提示卡 -->
-  <view class="glass-card tip-card">
-    <view class="tip-header">
-      <t-icon name="tips" size="28rpx" color="var(--accent-gold)" />
-      <text class="tip-title" style="margin-left:8rpx;">MasterPlan 申硕备考心法</text>
-    </view>
-    <view class="tip-content">
-      <text>• 统考与学校考试可并行准备，每年5月国考及4/10月题库考务必主动报考；</text>
-      <text>• 大论文1.5年倒计时从考完最后一门算起，建议小论文提前撰写，避免倒计时启动后时间局促！</text>
-    </view>
-  </view>
 </view>

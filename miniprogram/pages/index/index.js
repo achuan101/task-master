@@ -28,8 +28,11 @@ Page({
   },
 
   onShow() {
-    // 每次切换回首页时刷新，确保其他页面打卡后的数据立即反映在大盘上
+    // 每次切换回首页时刷新，确保其他页面打卡后的数据立即反映在首页上
     this.refreshDashboard();
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 });
+    }
   },
 
   onPullDownRefresh() {
@@ -44,7 +47,7 @@ Page({
     const thesis = Storage.getThesisFlow();
     const events = Storage.getEvents();
 
-    // 1. 生命线计算
+    // 1. 进度线计算
     const lifeline = calculateLifeline(user.enrollDate, user.deadlineDate);
 
     // 2. 课程学分统计

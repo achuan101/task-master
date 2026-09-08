@@ -14,39 +14,33 @@
     </view>
   </view>
 
-  <!-- 1. 所属专业与方案体系 -->
+  <!-- 当前专业 -->
   <view class="section-header">
     <view class="section-title">
       <text class="section-icon">📚</text>
-      <text>培养专业与方案体系</text>
+      <text>当前专业</text>
     </view>
-    <text class="section-subtitle">架构支持多专业扩展</text>
   </view>
 
   <view class="major-list">
-    <block wx:for="{{majors}}" wx:key="id">
-      <view 
-        class="major-card glass-card {{item.active ? 'active-major' : 'disabled-major'}}"
-        bindtap="onSelectMajor"
-        data-major="{{item}}"
-      >
-        <view class="major-info flex-between">
-          <view>
-            <view class="major-name-row">
-              <text class="major-name">{{item.name}}</text>
-              <text class="status-pill {{item.active ? 'passed' : 'pending'}}">
-                {{item.active ? '当前使用中' : '即将上线'}}
-              </text>
-            </view>
-            <text class="major-desc">{{item.desc}}</text>
+    <view class="major-card glass-card active-major">
+      <view class="major-info flex-between">
+        <view>
+          <view class="major-name-row">
+            <text class="major-name">{{user.majorName || '大数据专业'}}</text>
+            <text class="status-pill passed">当前使用中</text>
           </view>
-          <view class="check-icon" wx:if="{{item.active}}">✓</view>
+          <text class="major-desc">14门课程 · 35学分 · 已上线</text>
         </view>
+        <view class="check-icon">✓</view>
       </view>
-    </block>
+      <view class="major-switch-row">
+        <button class="switch-major-btn" bindtap="switchMajor">切换专业</button>
+      </view>
+    </view>
   </view>
 
-  <!-- 2. 学籍生命线时间调整 -->
+  <!-- 学籍起止与到期设定 -->
   <view class="section-header">
     <view class="section-title">
       <text class="section-icon">⏱️</text>
@@ -77,34 +71,5 @@
       </view>
     </picker>
   </view>
-
-  <!-- 3. 便捷工具箱 -->
-  <view class="section-header">
-    <view class="section-title">
-      <text class="section-icon">🛠️</text>
-      <text>工具与数据管理</text>
-    </view>
-  </view>
-
-  <view class="glass-card settings-card">
-    <view class="setting-item flex-between" bindtap="copyReport">
-      <view class="tool-left">
-        <text class="tool-icon">📋</text>
-        <text class="setting-label">复制当前进度简报</text>
-      </view>
-      <text class="tool-desc">向导师汇报 / 同步进度 ›</text>
-    </view>
-
-    <view class="divider"></view>
-
-    <view class="setting-item flex-between" bindtap="resetData">
-      <view class="tool-left">
-        <text class="tool-icon danger">🔄</text>
-        <text class="setting-label danger">重置所有测试打卡数据</text>
-      </view>
-      <text class="tool-desc">恢复默认未通过状态 ›</text>
-    </view>
-  </view>
-
 
 </view>

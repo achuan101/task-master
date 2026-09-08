@@ -21,67 +21,13 @@
   <!-- 选项卡切换 -->
   <view style="margin-bottom: 24rpx; background: var(--bg-secondary); border-radius: 16rpx; overflow: hidden; border: 1px solid var(--border-subtle);">
     <t-tabs value="{{activeTab}}" bind:change="switchTab" theme="card">
-      <t-tab-panel value="national" label="国家统考 (5月)" badge-props="{{ {count: stats.nationalPassed + '/' + stats.nationalTotal} }}"></t-tab-panel>
       <t-tab-panel value="pool" label="题库考 (4/10月)" badge-props="{{ {count: stats.poolPassed + '/' + stats.poolTotal} }}"></t-tab-panel>
       <t-tab-panel value="non_pool" label="非题库" badge-props="{{ {count: stats.nonPoolPassed + '/' + stats.nonPoolTotal} }}"></t-tab-panel>
+      <t-tab-panel value="national" label="国家统考 (5月)" badge-props="{{ {count: stats.nationalPassed + '/' + stats.nationalTotal} }}"></t-tab-panel>
     </t-tabs>
   </view>
 
-  <!-- 1. 国家统考列表 -->
-  <block wx:if="{{activeTab === 'national'}}">
-    <view class="tab-desc-alert">
-      <t-icon name="error-circle" size="32rpx" color="var(--accent-gold)" />
-      <text style="margin-left:8rpx;">闭卷全国统考，每年5月仅举行1次，4年有效期内共4次机会（各门成绩60分合格有效）。</text>
-    </view>
-
-    <view class="exam-list">
-      <block wx:for="{{nationalExams}}" wx:key="id">
-        <view class="exam-card glass-card {{item.status === 'passed' ? 'card-passed' : ''}}">
-          <view class="exam-card-top flex-between">
-            <view class="exam-main-title">
-              <t-tag variant="light-outline" theme="warning">统考</t-tag>
-              <text class="exam-name">{{item.subjectName}}</text>
-            </view>
-            <t-tag theme="{{item.status === 'passed' ? 'success' : 'default'}}" variant="light">
-              {{item.status === 'passed' ? '已通过' : '备考中'}}
-            </t-tag>
-          </view>
-
-          <!-- 4次机会指示灯 -->
-          <view class="chances-row flex-between">
-            <view class="chances-label">
-              <text>4年4次机会使用跟踪：</text>
-            </view>
-            <view class="chance-dots">
-              <view class="dot {{4 - item.remainingAttempts >= 1 ? 'used' : 'remain'}}"></view>
-              <view class="dot {{4 - item.remainingAttempts >= 2 ? 'used' : 'remain'}}"></view>
-              <view class="dot {{4 - item.remainingAttempts >= 3 ? 'used' : 'remain'}}"></view>
-              <view class="dot {{4 - item.remainingAttempts >= 4 ? 'used' : 'remain'}}"></view>
-              <text class="remain-text">剩余 {{item.remainingAttempts}} 次</text>
-            </view>
-          </view>
-
-          <view class="exam-card-footer flex-between">
-            <view class="pass-date-meta">
-              <text wx:if="{{item.passDate}}">通过时间：{{item.passDate}}</text>
-              <text wx:else>每年3月初报名 · 5月下旬开考</text>
-            </view>
-            <button 
-              class="action-btn {{item.status === 'passed' ? 'btn-cancel' : 'btn-pass'}}"
-              bindtap="toggleNationalStatus"
-              data-id="{{item.id}}"
-              data-status="{{item.status}}"
-              size="mini"
-            >
-              {{item.status === 'passed' ? '取消通过' : '标记已通过'}}
-            </button>
-          </view>
-        </view>
-      </block>
-    </view>
-  </block>
-
-  <!-- 2. 学校题库考列表 -->
+  <!-- 1. 学校题库考列表 -->
   <block wx:if="{{activeTab === 'pool'}}">
     <view class="tab-desc-alert pool">
       <t-icon name="book" size="32rpx" color="var(--accent-cyan)" />
@@ -126,7 +72,7 @@
     </view>
   </block>
 
-  <!-- 3. 学院非题库课程列表 -->
+  <!-- 2. 学院非题库课程列表 -->
   <block wx:if="{{activeTab === 'non_pool'}}">
     <view class="tab-desc-alert green">
       <t-icon name="education" size="32rpx" color="var(--accent-green)" />
@@ -182,6 +128,60 @@
             </view>
           </view>
         </block>
+      </block>
+    </view>
+  </block>
+
+  <!-- 3. 国家统考列表 -->
+  <block wx:if="{{activeTab === 'national'}}">
+    <view class="tab-desc-alert">
+      <t-icon name="error-circle" size="32rpx" color="var(--accent-gold)" />
+      <text style="margin-left:8rpx;">闭卷全国统考，每年5月仅举行1次，4年有效期内共4次机会（各门成绩60分合格有效）。</text>
+    </view>
+
+    <view class="exam-list">
+      <block wx:for="{{nationalExams}}" wx:key="id">
+        <view class="exam-card glass-card {{item.status === 'passed' ? 'card-passed' : ''}}">
+          <view class="exam-card-top flex-between">
+            <view class="exam-main-title">
+              <t-tag variant="light-outline" theme="warning">统考</t-tag>
+              <text class="exam-name">{{item.subjectName}}</text>
+            </view>
+            <t-tag theme="{{item.status === 'passed' ? 'success' : 'default'}}" variant="light">
+              {{item.status === 'passed' ? '已通过' : '备考中'}}
+            </t-tag>
+          </view>
+
+          <!-- 4次机会指示灯 -->
+          <view class="chances-row flex-between">
+            <view class="chances-label">
+              <text>4年4次机会使用跟踪：</text>
+            </view>
+            <view class="chance-dots">
+              <view class="dot {{4 - item.remainingAttempts >= 1 ? 'used' : 'remain'}}"></view>
+              <view class="dot {{4 - item.remainingAttempts >= 2 ? 'used' : 'remain'}}"></view>
+              <view class="dot {{4 - item.remainingAttempts >= 3 ? 'used' : 'remain'}}"></view>
+              <view class="dot {{4 - item.remainingAttempts >= 4 ? 'used' : 'remain'}}"></view>
+              <text class="remain-text">剩余 {{item.remainingAttempts}} 次</text>
+            </view>
+          </view>
+
+          <view class="exam-card-footer flex-between">
+            <view class="pass-date-meta">
+              <text wx:if="{{item.passDate}}">通过时间：{{item.passDate}}</text>
+              <text wx:else>每年3月初报名 · 5月下旬开考</text>
+            </view>
+            <button 
+              class="action-btn {{item.status === 'passed' ? 'btn-cancel' : 'btn-pass'}}"
+              bindtap="toggleNationalStatus"
+              data-id="{{item.id}}"
+              data-status="{{item.status}}"
+              size="mini"
+            >
+              {{item.status === 'passed' ? '取消通过' : '标记已通过'}}
+            </button>
+          </view>
+        </view>
       </block>
     </view>
   </block>
