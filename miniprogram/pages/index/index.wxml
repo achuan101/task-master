@@ -73,7 +73,7 @@
         <view class="mini-fill" style="width: {{stats.courseProgress}}%"></view>
       </view>
       <view class="pillar-footer">
-        <text>4门题库 + 10门非题库</text>
+        <text>{{stats.poolTotal}}门题库 + {{stats.nonPoolTotal}}门非题库</text>
       </view>
     </view>
 

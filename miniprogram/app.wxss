@@ -1,32 +1,57 @@
 /** app.wxss - MasterPlan 全局设计规范 **/
 
 page {
-  --bg-primary: #0B1120;       /* 宇宙深蓝底色 */
-  --bg-secondary: #0F172A;     /* 卡片深灰底色 */
-  --bg-card: #1E293B;          /* 卡片高亮底色 */
-  --bg-card-hover: #334155;    /* 点击悬浮色 */
+  --bg-primary: #F8FAFC;       /* 浅灰底色 */
+  --bg-secondary: #FFFFFF;     /* 纯白卡片底色 */
+  --bg-card: #F1F5F9;          /* 卡片高亮底色 */
+  --bg-card-hover: #E2E8F0;    /* 点击悬浮色 */
   
-  --text-primary: #F8FAFC;     /* 纯净白主文本 */
-  --text-secondary: #94A3B8;   /* 柔和灰副文本 */
-  --text-muted: #64748B;       /* 弱化说明文本 */
+  --text-primary: #0F172A;     /* 深色主文本 */
+  --text-secondary: #475569;   /* 次级说明文本 */
+  --text-muted: #94A3B8;       /* 弱化文本 */
   
-  --accent-cyan: #38BDF8;      /* 核心霓虹青 (与 Logo 呼应) */
-  --accent-indigo: #6366F1;    /* 科技靛蓝 */
-  --accent-gold: #FBBF24;      /* 成就与金牌黄 */
-  --accent-green: #34D399;     /* 顺利/通过翡翠绿 */
-  --accent-rose: #FB7185;      /* 预警/截止玫瑰红 */
+  --accent-cyan: #0EA5E9;      /* 核心青色 */
+  --accent-indigo: #4F46E5;    /* 科技靛蓝 */
+  --accent-gold: #D97706;      /* 金色 */
+  --accent-green: #10B981;     /* 翡翠绿 */
+  --accent-rose: #E11D48;      /* 玫瑰红 */
   
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-focus: rgba(56, 189, 248, 0.35);
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-focus: rgba(14, 165, 233, 0.35);
   
-  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 15px rgba(56, 189, 248, 0.15);
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 15px rgba(14, 165, 233, 0.15);
 
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  page {
+    --bg-primary: #0B1120;
+    --bg-secondary: #0F172A;
+    --bg-card: #1E293B;
+    --bg-card-hover: #334155;
+    
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    
+    --accent-cyan: #38BDF8;
+    --accent-indigo: #6366F1;
+    --accent-gold: #FBBF24;
+    --accent-green: #34D399;
+    --accent-rose: #FB7185;
+    
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-focus: rgba(56, 189, 248, 0.35);
+    
+    --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 15px rgba(56, 189, 248, 0.15);
+  }
 }
 
 /* 页面通用容器 */

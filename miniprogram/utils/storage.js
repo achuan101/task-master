@@ -120,6 +120,13 @@ export const Storage = {
         thesisDeadline: thesisDeadline
       });
       return { triggered: true, maxPassDate, thesisDeadline };
+    } else {
+      if (user.thesisTriggeredAt) {
+        this.updateUser({
+          thesisTriggeredAt: null,
+          thesisDeadline: null
+        });
+      }
     }
     return { triggered: false };
   },

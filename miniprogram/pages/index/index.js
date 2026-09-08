@@ -76,6 +76,9 @@ Page({
     // 6. 近期重要日程
     const upcomingEvents = getUpcomingEvents(events);
 
+    const poolCoursesCount = courses.filter(c => c.examType === 'pool').length;
+    const nonPoolCoursesCount = courses.filter(c => c.examType === 'non_pool').length;
+
     this.setData({
       user,
       lifeline,
@@ -87,6 +90,8 @@ Page({
         courseProgress,
         passedExams,
         totalExams: exams.length,
+        poolTotal: poolCoursesCount,
+        nonPoolTotal: nonPoolCoursesCount,
         paperStatusText,
         paperPassed: thesis.paperPublished || thesis.paperStatus === 'published',
         thesisStageText: currentStage ? currentStage.name : '未开始',

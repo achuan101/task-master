@@ -1,0 +1,38 @@
+{
+  "light": {
+    "navBgColor": "#FFFFFF",
+    "navTextStyle": "black",
+    "bgColor": "#F8FAFC",
+    "bgTextStyle": "dark",
+    "tabColor": "#64748B",
+    "tabSelectedColor": "#0EA5E9",
+    "tabBgColor": "#FFFFFF",
+    "tabBorderStyle": "white",
+    "iconHome": "assets/tab_home_light.png",
+    "iconHomeActive": "assets/tab_home_active_light.png",
+    "iconExam": "assets/tab_exam_light.png",
+    "iconExamActive": "assets/tab_exam_active_light.png",
+    "iconThesis": "assets/tab_thesis_light.png",
+    "iconThesisActive": "assets/tab_thesis_active_light.png",
+    "iconMine": "assets/tab_mine_light.png",
+    "iconMineActive": "assets/tab_mine_active_light.png"
+  },
+  "dark": {
+    "navBgColor": "#0F172A",
+    "navTextStyle": "white",
+    "bgColor": "#0B1120",
+    "bgTextStyle": "light",
+    "tabColor": "#94A3B8",
+    "tabSelectedColor": "#38BDF8",
+    "tabBgColor": "#0F172A",
+    "tabBorderStyle": "black",
+    "iconHome": "assets/tab_home.png",
+    "iconHomeActive": "assets/tab_home_active.png",
+    "iconExam": "assets/tab_exam.png",
+    "iconExamActive": "assets/tab_exam_active.png",
+    "iconThesis": "assets/tab_thesis.png",
+    "iconThesisActive": "assets/tab_thesis_active.png",
+    "iconMine": "assets/tab_mine.png",
+    "iconMineActive": "assets/tab_mine_active.png"
+  }
+}

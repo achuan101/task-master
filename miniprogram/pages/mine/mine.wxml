@@ -106,22 +106,5 @@
     </view>
   </view>
 
-  <!-- 4. 开发者与云凭证卡片 -->
-  <view class="glass-card info-card">
-    <view class="info-title">
-      <text>小程序云开发配置参数</text>
-    </view>
-    <view class="cred-row flex-between" bindtap="copyAppId">
-      <text class="cred-label">AppID (小程序ID)：</text>
-      <text class="cred-val">{{appInfo.appId}} (点击复制)</text>
-    </view>
-    <view class="cred-row flex-between">
-      <text class="cred-label">原始ID：</text>
-      <text class="cred-val">{{appInfo.rawId}}</text>
-    </view>
-    <view class="cred-row flex-between">
-      <text class="cred-label">运行架构：</text>
-      <text class="cred-val">原生小程序 + TDesign + 微信云开发</text>
-    </view>
-  </view>
+
 </view>

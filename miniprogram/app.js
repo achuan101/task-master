@@ -41,6 +41,13 @@ App({
               }
             });
           });
+          updateManager.onUpdateFailed(function () {
+            wx.showModal({
+              title: '更新失败',
+              content: '新版本下载失败，请检查网络后重试。',
+              showCancel: false
+            });
+          });
         }
       });
     }

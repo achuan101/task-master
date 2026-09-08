@@ -17,11 +17,14 @@ exports.main = async (event, context) => {
     const hitEvents = [];
     for (const ev of events) {
       // 计算目标日期与当前日期差
-      const eventDate = new Date(now.getFullYear(), ev.recurringMonth - 1, ev.recurringDay);
+      let eventDate = new Date(now.getFullYear(), ev.recurringMonth - 1, ev.recurringDay);
+      if (eventDate.getTime() < now.getTime() - (1000 * 60 * 60 * 24)) {
+        eventDate = new Date(now.getFullYear() + 1, ev.recurringMonth - 1, ev.recurringDay);
+      }
       const diffTime = eventDate.getTime() - now.getTime();
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-      if (diffDays === ev.reminderDaysBefore) {
+      if (diffDays <= ev.reminderDaysBefore && diffDays >= 0) {
         hitEvents.push({ ...ev, daysLeft: diffDays });
       }
     }

@@ -110,6 +110,11 @@ Page({
       const currentYear = new Date().getFullYear();
       attempts.push({ year: currentYear, score: 70, passed: true });
       remaining = Math.max(0, remaining - 1);
+    } else {
+      if (attempts.length > 0) {
+        attempts.pop();
+        remaining = Math.min(4, remaining + 1);
+      }
     }
 
     Storage.updateNationalExam(id, {
@@ -140,7 +145,7 @@ Page({
         });
       } else {
         wx.showToast({
-          title: '打卡成功！学分+1',
+          title: '打卡成功！',
           icon: 'success'
         });
       }

@@ -16,10 +16,12 @@ export function formatDate(date) {
  * 计算两个日期相差的天数
  */
 export function diffDays(startDate, endDate) {
-  const start = new Date(startDate).getTime();
-  const end = new Date(endDate).getTime();
-  const diff = end - start;
-  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  const start = new Date(startDate);
+  start.setHours(0, 0, 0, 0);
+  const end = new Date(endDate);
+  end.setHours(0, 0, 0, 0);
+  const diff = end.getTime() - start.getTime();
+  return Math.round(diff / (1000 * 60 * 60 * 24));
 }
 
 /**

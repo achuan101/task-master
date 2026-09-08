@@ -22,15 +22,15 @@
   <view class="custom-tabs">
     <view class="tab-btn {{activeTab === 'national' ? 'active' : ''}}" bindtap="switchTab" data-tab="national">
       <text>国家统考 (5月)</text>
-      <text class="tab-badge">{{stats.nationalPassed}}/2</text>
+      <text class="tab-badge">{{stats.nationalPassed}}/{{stats.nationalTotal}}</text>
     </view>
     <view class="tab-btn {{activeTab === 'pool' ? 'active' : ''}}" bindtap="switchTab" data-tab="pool">
       <text>题库考 (4/10月)</text>
-      <text class="tab-badge">{{stats.poolPassed}}/4</text>
+      <text class="tab-badge">{{stats.poolPassed}}/{{stats.poolTotal}}</text>
     </view>
     <view class="tab-btn {{activeTab === 'non_pool' ? 'active' : ''}}" bindtap="switchTab" data-tab="non_pool">
-      <text>非题库 (10门)</text>
-      <text class="tab-badge">{{stats.nonPoolPassed}}/10</text>
+      <text>非题库</text>
+      <text class="tab-badge">{{stats.nonPoolPassed}}/{{stats.nonPoolTotal}}</text>
     </view>
   </view>
 

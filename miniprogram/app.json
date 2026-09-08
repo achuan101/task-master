@@ -5,42 +5,44 @@
     "pages/thesis/thesis",
     "pages/mine/mine"
   ],
+  "darkmode": true,
+  "themeLocation": "theme.json",
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#0F172A",
+    "backgroundTextStyle": "@bgTextStyle",
+    "navigationBarBackgroundColor": "@navBgColor",
     "navigationBarTitleText": "MasterPlan 申硕进度",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#0B1120"
+    "navigationBarTextStyle": "@navTextStyle",
+    "backgroundColor": "@bgColor"
   },
   "tabBar": {
-    "color": "#94A3B8",
-    "selectedColor": "#38BDF8",
-    "backgroundColor": "#0F172A",
-    "borderStyle": "black",
+    "color": "@tabColor",
+    "selectedColor": "@tabSelectedColor",
+    "backgroundColor": "@tabBgColor",
+    "borderStyle": "@tabBorderStyle",
     "list": [
       {
         "pagePath": "pages/index/index",
         "text": "大盘",
-        "iconPath": "assets/tab_home.png",
-        "selectedIconPath": "assets/tab_home_active.png"
+        "iconPath": "@iconHome",
+        "selectedIconPath": "@iconHomeActive"
       },
       {
         "pagePath": "pages/exam/exam",
         "text": "考试",
-        "iconPath": "assets/tab_exam.png",
-        "selectedIconPath": "assets/tab_exam_active.png"
+        "iconPath": "@iconExam",
+        "selectedIconPath": "@iconExamActive"
       },
       {
         "pagePath": "pages/thesis/thesis",
         "text": "论文",
-        "iconPath": "assets/tab_thesis.png",
-        "selectedIconPath": "assets/tab_thesis_active.png"
+        "iconPath": "@iconThesis",
+        "selectedIconPath": "@iconThesisActive"
       },
       {
         "pagePath": "pages/mine/mine",
         "text": "设置",
-        "iconPath": "assets/tab_mine.png",
-        "selectedIconPath": "assets/tab_mine_active.png"
+        "iconPath": "@iconMine",
+        "selectedIconPath": "@iconMineActive"
       }
     ]
   },

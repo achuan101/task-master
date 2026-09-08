@@ -31,7 +31,8 @@ exports.main = async (event, context) => {
     await db.collection('users').doc(openid).set({ data: defaultUser });
 
     // 3. 从 major_templates 克隆个人课程表
-    const templates = await db.collection('major_templates').where({ major: major }).get();
+    // 显式声明 limit 避免默认的 20 条限制
+    const templates = await db.collection('major_templates').where({ major: major }).limit(100).get();
     for (const item of templates.data) {
       await db.collection('courses').add({
         data: {
