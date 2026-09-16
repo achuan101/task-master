@@ -1,9 +1,0 @@
-{
-  "triggers": [
-    {
-      "name": "dailyExamReminder",
-      "type": "timer",
-      "config": "0 0 9 * * * *"
-    }
-  ]
-}

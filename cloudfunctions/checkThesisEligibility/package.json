@@ -1,9 +1,0 @@
-{
-  "name": "checkThesisEligibility",
-  "version": "1.0.0",
-  "description": "MasterPlan 自动核算考试通关并以最后一门通过日期激活18个月大论文倒计时",
-  "main": "index.js",
-  "dependencies": {
-    "wx-server-sdk": "~2.6.3"
-  }
-}
