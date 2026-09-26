@@ -45,7 +45,7 @@ export const BIG_DATA_COURSES = [
     category: "major_core",
     categoryName: "专业课",
     credit: 4,
-    examType: "non_pool",
+    examType: "pool",
     status: "pending",
     passDate: null,
     score: null
@@ -117,7 +117,7 @@ export const BIG_DATA_COURSES = [
     category: "subject_base",
     categoryName: "学科基础课",
     credit: 3,
-    examType: "pool",
+    examType: "non_pool",
     status: "pending",
     passDate: null,
     score: null
@@ -444,8 +444,8 @@ export const ANNUAL_EVENTS = [
   {
     id: "ev_5",
     title: "学校题库考试 (秋季批次)",
-    month: 10,
-    day: 24,
+    month: 11,
+    day: 7,
     type: "pool",
     tag: "题库考",
     desc: "秋季题库考试批次，查漏补缺通关题库科目"

@@ -165,7 +165,7 @@
       <t-icon name="calendar" size="36rpx" color="var(--text-primary)" />
       <text style="margin-left:8rpx;">年度备考关键窗口</text>
     </view>
-    <text class="section-subtitle">按时间先后排序</text>
+    <text class="section-subtitle">历史数据参考，请以实际为准</text>
   </view>
 
   <view class="events-list">

@@ -104,7 +104,25 @@ export const Storage = {
     if (!_openid) {
       return cloneMajorPackage(this.getUser().major || 'big_data').courses;
     }
-    return wx.getStorageSync(keyOf(_openid, 'courses')) || [];
+    const user = this.getUser();
+    const stored = wx.getStorageSync(keyOf(_openid, 'courses')) || [];
+    const seed = MAJOR_REGISTRY[user.major]?.courses;
+    if (!seed || !stored.length) return stored;
+
+    // 同步种子中的 examType 等元数据，保留用户打卡进度
+    const seedById = {};
+    seed.forEach((c) => { seedById[c.id] = c; });
+    let changed = false;
+    const merged = stored.map((c) => {
+      const s = seedById[c.id];
+      if (!s || c.examType === s.examType) return c;
+      changed = true;
+      return { ...c, examType: s.examType };
+    });
+    if (changed) {
+      wx.setStorageSync(keyOf(_openid, 'courses'), merged);
+    }
+    return merged;
   },
 
   getNationalExams() {
@@ -120,8 +138,11 @@ export const Storage = {
   },
 
   getEvents() {
-    if (!_openid) return [...ANNUAL_EVENTS];
-    return wx.getStorageSync(keyOf(_openid, 'events')) || [...ANNUAL_EVENTS];
+    // 年度窗口以代码种子为准（用户不可编辑）；每次读取同步到本地
+    if (_openid) {
+      wx.setStorageSync(keyOf(_openid, 'events'), ANNUAL_EVENTS);
+    }
+    return [...ANNUAL_EVENTS];
   },
 
   /** 本地定时预警：返回今日命中的年度事件 */
