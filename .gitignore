@@ -1,13 +1,23 @@
 node_modules/
 miniprogram/miniprogram_npm/
 .DS_Store
+Thumbs.db
 *.log
 .idea/
 .vscode/
+.cursor/
 .agents/
 .claude/
 doc/
 
-# 微信开发者工具本地个人配置（因人而异，无需提交）
-project.private.config.json
-miniprogram/project.private.config.json
+# 环境变量与密钥
+.env
+.env.*
+*.pem
+credentials.json
+
+# Cursor / Agent 工具锁
+skills-lock.json
+
+miniprogram/project.config.json
+project.config.json
